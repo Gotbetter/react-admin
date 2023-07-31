@@ -8,7 +8,7 @@ const GlobalStyle = createGlobalStyle`
     /* height: 100%; */
     margin: 0;
     padding: 0;
-    /* background-color: #363740; */
+    background-color: #363740;
   }
   /* html {
     font-size: 10px;

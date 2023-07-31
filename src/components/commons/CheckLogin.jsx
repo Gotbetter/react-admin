@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { isExpired } from 'react-jwt';
 import { loginTokenState } from "../../recoil/login/loginTokenState"
 
-export default function CheckLogin() {
+interface Props {
+    children: ReactNode;
+}
+
+export default function CheckLogin({ children }: Props) {
     const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
 
     const navigate = useNavigate();
@@ -12,7 +16,7 @@ export default function CheckLogin() {
     useEffect(() => {
         if (loginToken.accessToken !== null && loginToken.refreshToken !== null
             && isExpired(loginToken.accessToken) === false) {
-            // navigate("/");
+            navigate("/");
         } else if (loginToken.accessToken !== null && loginToken.refreshToken !== null
             && isExpired(loginToken.accessToken) === true) {
             // 추가 - selector
@@ -26,5 +30,5 @@ export default function CheckLogin() {
         }
     }, [loginToken.accessToken, loginToken.refreshToken]);
 
-    return(<></>);
+    return(children);
 }

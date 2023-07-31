@@ -72,7 +72,6 @@ const Layout = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: #363740;
 `;
 
 const WhiteBox = styled.div`
