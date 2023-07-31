@@ -15,4 +15,5 @@ const NotFoundImg = styled.div`
     justify-content: center;
     font-size: 40px;
     font-weight: 700;
+    color: #d9d9d9;
 `;

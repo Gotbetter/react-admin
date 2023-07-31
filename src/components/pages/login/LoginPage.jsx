@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
-import client from "../../../api/client";
 import { useRecoilState } from "recoil";
 import { loginTokenState } from "../../../recoil/login/loginTokenState";
 import { loginRequest } from "../../../api/user";
 import { useMutation } from "@tanstack/react-query";
-import format from 'pretty-format';
 
 export default function LoginPage() {
   const [authId, setAuthId] = useState("");
@@ -75,7 +72,6 @@ const Layout = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: #363740;
 `;
 
 const WhiteBox = styled.div`
