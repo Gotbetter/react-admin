@@ -1,60 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import instance from "../../../api/axios";
+import client from "../../../api/client";
+import { useRecoilState } from "recoil";
+import { loginTokenState } from "../../../recoil/login/loginTokenState";
+import { loginRequest } from "../../../api/user";
+import { useMutation } from "@tanstack/react-query";
+import format from 'pretty-format';
 
 export default function LoginPage() {
   const [authId, setAuthId] = useState("");
   const [password, setPassword] = useState("");
+  const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
 
-  const movePage = useNavigate();
-  const goRooms = () => {
-    movePage("/rooms");
-  };
+  const navigate = useNavigate();
 
-  const login = async () => {
-    try {
-      console.log(authId);
-      console.log(password);
-      const response = await instance.post("/users/login/admin", {
-        auth_id: authId,
-        password: password,
-      });
-      console.log(response.data);
-      goRooms();
-    } catch (error) {
-      console.error(error);
-      if (error.response.status === 403) {
-        alert("관리자만 이용 가능합니다.");
-      } else if ((authId === "") & (password === "")) {
-        // 아이디, 비밀번호 모두 공백인 경우
-        alert("아이디와 비밀번호를 입력해 주세요!");
-      } else if (authId === "") {
-        // 아이디가 공백인 경우
-        alert("아이디를 입력해 주세요!");
-      } else if (password === "") {
-        // 비밀번호가 공백인 경우
-        alert("비밀번호를 입력해 주세요!");
-      } else {
-        // 아이디와 비밀번호가 등록되어 있지 않을 때
-        alert("아이디와 비밀번호를 확인해 주세요!");
-      }
+  useEffect(() => {
+    if (loginToken.accessToken !== null && loginToken.refreshToken !== null) {
+      navigate("/");
     }
-  };
+  }, [loginToken.accessToken, loginToken.refreshToken])
+
+  const { mutate: login } = useMutation(() => loginRequest({ auth_id: authId, password: password }), {
+    onError: (err) => {
+      const { status } = err.response;
+      // console.log(format(err.response));
+      // setError(true);
+      if (status === 400) {
+        alert('모든 정보를 입력해 주세요.');
+        // setMessage('모든 정보를 입력해 주세요.');
+      }
+      if (status === 404) {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+        // setMessage('아이디 또는 비밀번호가 일치하지 않습니다.');
+      }
+    },
+    onSuccess: async (res) => {
+      // console.log(format(res.data));
+      const { access_token, refresh_token } = res.data;
+      setLoginToken({
+        accessToken: access_token,
+        refreshToken: refresh_token
+      });
+      alert('로그인 성공');
+      navigate('/');
+    },
+  });
 
   return (
     <Layout>
       <WhiteBox>
         <LogoBox>로고</LogoBox>
-        <AppName>GotBetter</AppName>
+        <AppName>GotBetter Admin</AppName>
         <TextInput
           type="text"
           placeholder="아이디"
           onChange={(e) => setAuthId(e.target.value)}
         />
         <TextInput
-          type="text"
+          type="password"
           placeholder="비밀번호"
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -102,7 +107,7 @@ const AppName = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 139px;
+  width: 316px;
   margin-top: 12px;
   margin-bottom: 36px;
   height: 48px;
