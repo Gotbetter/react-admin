@@ -1,8 +1,10 @@
 import React from "react";
-import MenuBar from "../../commons/MenuBar";
 import styled from "styled-components";
+import ContentArea from "../../commons/ContentArea";
 
 export default function DashPage() {
 
-    return(<MenuBar tab={'/'}></MenuBar>);
+    return (
+        <ContentArea tab={'/'} title={'대시보드 (예정)'}></ContentArea>
+    );
 }

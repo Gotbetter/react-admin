@@ -1,8 +1,10 @@
 import React from "react";
-import MenuBar from "../../commons/MenuBar";
 import styled from "styled-components";
+import ContentArea from "../../commons/ContentArea";
 
 export default function RoomPage() {
 
-    return(<MenuBar tab={'/rooms'}></MenuBar>);
+    return (
+        <ContentArea tab={'/rooms'} title={'방 관리'}></ContentArea>
+    );
 }

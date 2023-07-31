@@ -1,8 +1,10 @@
 import React from "react";
-import MenuBar from "../../commons/MenuBar";
 import styled from "styled-components";
+import ContentArea from "../../commons/ContentArea";
 
 export default function UserPage() {
 
-    return(<MenuBar tab={'/users'}></MenuBar>);
+    return (
+        <ContentArea tab={'/users'} title={'회원 관리'}></ContentArea>
+    );
 }
