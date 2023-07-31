@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DashIcon from "../../assets/dashIcon.svg"
@@ -50,7 +50,7 @@ export default function MenuBar({ tab }) {
 const Layout = styled.div`
     display: flex;
     flex-direction: column;
-    width: 255px;
+    width: 350px;
     height: 608px;
     color: #A4A6B3;
 `;

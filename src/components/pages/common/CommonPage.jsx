@@ -1,8 +1,10 @@
 import React from "react";
-import MenuBar from "../../commons/MenuBar";
 import styled from "styled-components";
+import ContentArea from "../../commons/ContentArea";
 
 export default function CommonPage() {
 
-    return(<MenuBar tab={'/commons'}></MenuBar>);
+    return (
+        <ContentArea tab={'/commons'} title={'공통 코드'}></ContentArea>
+    );
 }

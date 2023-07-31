@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginTokenState } from "../recoil/login/loginTokenState";
+import { loginTokenSelector, loginTokenState } from "../recoil/login/loginTokenState";
 import format from 'pretty-format';
 
 axios.defaults.withCredentials = true;
@@ -20,14 +20,16 @@ client.interceptors.request.use(async (config) => {
     return config;
   }
 
-  const loginToken = useRecoilValue(loginTokenState);
+  const sessionSearch = window.sessionStorage.getItem("sessionStorage");
+  const loginToken = JSON.parse(sessionSearch).loginToken;
   let token = null;
-  if (config.url === '/users/reissue') {
+
+  if (config.url === 'users/reissue') {
     token = loginToken.refreshToken;
   } else {
     token = loginToken.accessToken;
   }
-
+  
   if (token !== null) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -44,26 +46,26 @@ client.interceptors.response.use(
     } = err;
 
     /** 1 */
-    if (config.url === `/users/reissue` || status !== 401 || config.sent) {
+    if (config.url === `users/reissue` || status !== 401 || config.sent) {
       return Promise.reject(err);
     }
 
     /** 2 */
     config.sent = true;
 
-    const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
-    const refresh_token = loginToken.refreshToken;
+    // const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
+    // const refresh_token = loginToken.refreshToken;
 
-    try {
-      const accessToken = await refreshToken(refresh_token, setLoginToken);
-      if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
-      }
+    // try {
+    //   const accessToken = await refreshToken(refresh_token, setLoginToken);
+    //   if (accessToken) {
+    //     config.headers.Authorization = `Bearer ${accessToken}`;
+    //   }
 
       return client(config);
-    } catch (err) {
-      console.log(format(err.response));
-    }
+    // } catch (err) {
+    //   console.log(format(err.response));
+    // }
   },
 );
 

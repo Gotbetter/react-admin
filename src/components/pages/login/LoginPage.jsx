@@ -13,12 +13,6 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (loginToken.accessToken !== null && loginToken.refreshToken !== null) {
-      navigate("/");
-    }
-  }, [loginToken.accessToken, loginToken.refreshToken])
-
   const { mutate: login } = useMutation(() => loginRequest({ auth_id: authId, password: password }), {
     onError: (err) => {
       const { status } = err.response;
@@ -44,6 +38,12 @@ export default function LoginPage() {
       navigate('/');
     },
   });
+
+  useEffect(() => {
+    if (loginToken.accessToken !== null && loginToken.refreshToken !== null) {
+      navigate("/");
+    }
+  }, [loginToken.accessToken, loginToken.refreshToken])
 
   return (
     <Layout>
