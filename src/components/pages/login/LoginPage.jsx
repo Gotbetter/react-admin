@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
-  const { mutate: login } = useMutation(() => loginRequest({ auth_id: authId, password: password }), {
+  const { mutate: login } = useMutation(() => loginRequest({ auth_id: authId, password: password }, true), {
     onError: (err) => {
       const { status } = err.response;
       // console.log(format(err.response));
@@ -21,6 +21,10 @@ export default function LoginPage() {
       if (status === 400) {
         alert('모든 정보를 입력해 주세요.');
         // setMessage('모든 정보를 입력해 주세요.');
+      }
+      if (status === 403) {
+        alert('관리자가 아닙니다.');
+        // setMessage('관리자가 아닙니다.');
       }
       if (status === 404) {
         alert('아이디 또는 비밀번호가 일치하지 않습니다.');
@@ -34,7 +38,7 @@ export default function LoginPage() {
         accessToken: access_token,
         refreshToken: refresh_token
       });
-      alert('로그인 성공');
+      // alert('로그인 성공');
       navigate('/');
     },
   });

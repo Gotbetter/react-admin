@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from 'react-jwt';
 import { loginTokenState } from "../../recoil/login/loginTokenState"
@@ -13,11 +13,11 @@ interface Props {
 
 export default function CheckLogin({ children }: Props) {
     const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
-    const [user, setUser] = useRecoilState(userState);
+    const setUser = useSetRecoilState(userState);
 
     const navigate = useNavigate();
 
-    const { data } = useQuery(['user'], fetchUser, {
+    const { data } = useQuery(['userInfo'], fetchUser, {
         retry: 1,
         staleTime: 500000,
         onSuccess: (data) => {

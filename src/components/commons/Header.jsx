@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../recoil/user/userState";
 
-export default function Header({ title }) {
+export default function Header({ title, children }) {
     const user = useRecoilValue(userState);
 
     return (
@@ -19,7 +19,9 @@ export default function Header({ title }) {
                 </UserWrapper>
             </HeaderWrapper>
             <BodyWrapper>
-                <WhiteBox></WhiteBox>
+                <WhiteBox>
+                    {children}
+                </WhiteBox>
             </BodyWrapper>
         </Layout>
     );
@@ -81,7 +83,7 @@ const ProfileWrapper = styled.div`
 `;
 
 const ProfileImage = styled.div`
-    background-color: #363740;
+    background-color: white;
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -99,15 +101,15 @@ const BodyWrapper = styled.div`
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
+    overflow: hidden;
 `;
 
 const WhiteBox = styled.div`
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     background-color: white;
     border-radius: 8px;
     border: 1px solid var(--grayscale-divider, #dfe0eb);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 `;
