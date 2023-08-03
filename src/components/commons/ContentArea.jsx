@@ -2,11 +2,11 @@ import { styled } from "styled-components";
 import MenuBar from "./MenuBar";
 import Header from "./Header";
 
-export default function ContentArea({ tab, title }) {
+export default function ContentArea({ tab, title, children }) {
     return (
         <Layout>
-            <MenuBar tab={tab}></MenuBar>
-            <Header title={title}>{'대시보드 (예정)'}</Header>
+            <MenuBar tab={tab} />
+            <Header title={title} children={children} />
         </Layout>
     );
 }
