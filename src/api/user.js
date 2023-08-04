@@ -6,5 +6,6 @@ export const fetchUser = () => client.get('users');
 
 export const fetchUsers = () => client.get('users/all');
 
-export const adminChangeReuqest = (userId, approve) => client.post(`users/${userId}/admin`, approve);
+export const adminChangeReuqest = (userId, approve) => client.patch(`users/${userId}/admin`, approve);
 
+export const deleteUser = (userId) => client.delete(`users/${userId}`);

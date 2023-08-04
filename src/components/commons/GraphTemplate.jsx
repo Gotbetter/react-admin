@@ -4,7 +4,7 @@ export default function GraphTemplate({columns, paddings, children}) {
 
     return (
         <>
-            <ColumnNameWrapper>
+            <ColumnNameWrapper grid={100 / columns.length}>
                 {columns.map(column => (
                     <ColumnName key={column.id} padding={paddings[column.id]}>{column.title}</ColumnName>
                 ))}
@@ -19,10 +19,9 @@ export default function GraphTemplate({columns, paddings, children}) {
 }
 
 const ColumnNameWrapper = styled.div`
-    height: 42px;
     padding: 12px 43px 12px 31px;// top right bottom left: ;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(25%, 1fr)); /* 자동으로 요소들 배치 */
+    grid-template-columns: ${props => (props.grid ? `repeat(auto-fit, minmax(${props.grid}%, 1fr));` : 'repeat(auto-fit, minmax(25%, 1fr));')}; /* 자동으로 요소들 배치 */
     border-bottom: 1px solid #DFE0EB;
     flex-shrink: 0;
 `;

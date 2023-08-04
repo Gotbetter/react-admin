@@ -39,15 +39,15 @@ export default function LoginPage() {
         refreshToken: refresh_token
       });
       // alert('로그인 성공');
-      navigate('/');
+      navigate('/rooms');
     },
   });
 
-  useEffect(() => {
-    if (loginToken.accessToken !== null && loginToken.refreshToken !== null) {
-      navigate("/");
-    }
-  }, [loginToken.accessToken, loginToken.refreshToken])
+  // useEffect(() => {
+  //   if (loginToken.accessToken !== null && loginToken.refreshToken !== null) {
+  //     navigate("/");
+  //   }
+  // }, [loginToken.accessToken, loginToken.refreshToken])
 
   return (
     <Layout>

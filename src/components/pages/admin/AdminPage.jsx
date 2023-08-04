@@ -5,20 +5,23 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminChangeReuqest, fetchUsers } from "../../../api/user";
 import GraphTemplate from "../../commons/GraphTemplate";
 import { admin_columns, admin_paddings } from "../../commons/column_type/admin";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../../recoil/user/userState";
 
 export default function AdminPage() {
     const [users, setUsers] = useState([]);
+    const loginUser = useRecoilValue(userState);
     const queryClient = useQueryClient();
     const paddings = admin_paddings;
     const columns = admin_columns;
 
-    const fetchUsersQuery = useQuery(['users'], fetchUsers, {
+    const fetchUsersQuery = useQuery(['usersforAdmin'], fetchUsers, {
         onSuccess: async (data) => {
             console.log('[AdminPage]: fetching users info');
             setUsers([...data]);
         },
         onError: async () => {
-            alert('사용자 정보 조회 실패');
+            alert('전체 사용자 정보 조회 실패');
             
         },
         select: (res) => res.data,
@@ -27,7 +30,7 @@ export default function AdminPage() {
     const { mutate: updateRoleType } = useMutation(({userId, approve}) => adminChangeReuqest(userId, {approve: approve}), {
         onSuccess: async (res) => {
             console.log('[AdminPage]: update role type');
-            queryClient.invalidateQueries('users');
+            queryClient.invalidateQueries('usersforAdmin');
         },
         onError: (err) => {
             const { status } = err.response;
@@ -35,7 +38,7 @@ export default function AdminPage() {
               alert('모든 정보를 입력해 주세요.');
             }
             if (status === 403) {
-              alert('관리자가 아닙니다.');
+              alert('메인 관리자가 아닙니다.');
             }
             if (status === 404) {
               alert('존재하지 않는 회원입니다.');
@@ -51,7 +54,7 @@ export default function AdminPage() {
         <ContentArea tab={'/admins'} title={'관리자'}>
             <GraphTemplate columns={columns} paddings={paddings}>
                 {users.map(user => (
-                    <List key={user.user_id}>
+                    <List key={user.user_id} grid={columns.length}>
                         <UserWrapper>
                             <ProfileWrapper>
                                 <ProfileImage>
@@ -66,7 +69,7 @@ export default function AdminPage() {
                             {user.role_type === "USER" ? (
                                 <Btn onClick={() => updateRoleType({userId: user.user_id, approve: true})} approve="true">{"승인"}</Btn>
                             ) : (
-                                <Btn onClick={() => updateRoleType({userId: user.user_id, approve: false})} hidden={user.role_type === "MAIN_ADMIN"}>{"해지"}</Btn>
+                                <Btn onClick={() => updateRoleType({userId: user.user_id, approve: false})} hidden={user.role_type === "MAIN_ADMIN" || user.user_id === loginUser.user_id}>{"해지"}</Btn>
                             )}
                         </UserInfo>
                     </List>
@@ -81,7 +84,8 @@ const List = styled.li`
     padding: 24px 31px 24px 31px;// top right bottom left: ;
     border-bottom: 1px solid #DFE0EB;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20%, 1fr)); /* 자동으로 요소들 배치 */
+    grid-template-columns: ${props => (props.grid ? `repeat(auto-fit, minmax(${props.grid}%, 1fr));` : 'repeat(auto-fit, minmax(25%, 1fr));')}; /* 자동으로 요소들 배치 */
+    // grid-template-columns: repeat(auto-fit, minmax(20%, 1fr)); /* 자동으로 요소들 배치 */
 `;
 
 const UserWrapper = styled.div`

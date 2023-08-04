@@ -10,7 +10,7 @@ export default function Header({ title, children }) {
             <HeaderWrapper>
                 <Title>{title}</Title>
                 <UserWrapper>
-                    <UserName>{"갓1"}</UserName>
+                    <UserName>{user.username}</UserName>
                     <ProfileWrapper>
                         <ProfileImage>
                             <img src={'data:image/png;base64,' + user.profile} alt=""/>
