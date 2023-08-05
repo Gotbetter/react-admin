@@ -1,4 +1,4 @@
-const user_paddings = [0, 70, 180, 180, 150, 100]
+const user_paddings = [0, 70, 160, 160, 150, 100]
 const user_columns = [
     {
         id: 0,
