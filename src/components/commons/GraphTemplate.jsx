@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 
 export default function GraphTemplate({ columns, paddings, children }) {
   return (
-    <div>
+    <>
       <ColumnNameWrapper grid={100 / columns.length}>
         {columns.map((column) => (
           <ColumnName key={column.id} padding={paddings[column.id]}>
@@ -11,7 +11,7 @@ export default function GraphTemplate({ columns, paddings, children }) {
         ))}
       </ColumnNameWrapper>
       <ListWrapper>{children}</ListWrapper>
-    </div>
+    </>
   );
 }
 
