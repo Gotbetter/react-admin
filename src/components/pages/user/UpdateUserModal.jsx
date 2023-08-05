@@ -36,6 +36,7 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
       setUsername("");
     }
   });
+
   return (
     <div>
       {isClicked && (
@@ -82,7 +83,12 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
               <Btn
                 color={YELLOW}
                 onClick={() =>
-                  updateUserInfo({ userId: user.user_id, username: username })
+                  username !== ""
+                    ? updateUserInfo({
+                        userId: user.user_id,
+                        username: username,
+                      })
+                    : handleClickModal({})
                 }
               >
                 수정
