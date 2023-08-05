@@ -6,7 +6,7 @@ import LoginPage from "./components/pages/login/LoginPage";
 import DashPage from "./components/pages/dash/DashPage";
 import RoomPage from "./components/pages/room/RoomPage";
 import NotFoundPage from "./components/pages/NotFoundPage";
-import CheckLogin from "./components/commons/CheckLogin";
+import CheckLogin from "./components/CheckLogin";
 import UserPage from "./components/pages/user/UserPage";
 import CommonPage from "./components/pages/common/CommonPage";
 import AdminPage from "./components/pages/admin/AdminPage";

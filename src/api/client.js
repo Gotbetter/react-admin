@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginTokenSelector, loginTokenState } from "../recoil/login/loginTokenState";
-import format from 'pretty-format';
+import {
+  loginTokenSelector,
+  loginTokenState,
+} from "../recoil/login/loginTokenState";
+import format from "pretty-format";
 
 axios.defaults.withCredentials = true;
 //const accessToken = localStorage.getItem('access_token');
@@ -16,7 +19,7 @@ client.interceptors.request.use(async (config) => {
     return config;
   }
 
-  if (config.url === 'users/login/admin') {
+  if (config.url === "users/login/admin") {
     return config;
   }
 
@@ -24,12 +27,12 @@ client.interceptors.request.use(async (config) => {
   const loginToken = JSON.parse(sessionSearch).loginToken;
   let token = null;
 
-  if (config.url === 'users/reissue') {
+  if (config.url === "users/reissue") {
     token = loginToken.refreshToken;
   } else {
     token = loginToken.accessToken;
   }
-  
+
   if (token !== null) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -62,15 +65,15 @@ client.interceptors.response.use(
     //     config.headers.Authorization = `Bearer ${accessToken}`;
     //   }
 
-      return client(config);
+    return client(config);
     // } catch (err) {
     //   console.log(format(err.response));
     // }
-  },
+  }
 );
 
 const refreshToken = async (refreshToken, setLoginToken) => {
-  console.log('refresh access_token');
+  console.log("refresh access_token");
 
   const {
     data: { access_token, refresh_token },
@@ -82,7 +85,7 @@ const refreshToken = async (refreshToken, setLoginToken) => {
         headers: {
           authorization: `Bearer ${refreshToken}`,
         },
-      },
+      }
     )
     .catch((err) => {
       console.log(err);
@@ -90,8 +93,8 @@ const refreshToken = async (refreshToken, setLoginToken) => {
 
   setLoginToken({
     accessToken: access_token,
-    refreshToken: refresh_token
-  })
+    refreshToken: refresh_token,
+  });
 
   return access_token;
 };

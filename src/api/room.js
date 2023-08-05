@@ -1,3 +1,3 @@
-import { client } from './client';
+import { client } from "./client";
 
-export const fetchRooms = () => client.get('rooms/admin');
+export const fetchRooms = () => client.get("rooms/admin");
