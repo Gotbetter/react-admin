@@ -8,6 +8,7 @@ import { deleteUser, fetchUsers } from "../../../api/user";
 import GraphTemplate from "../../commons/GraphTemplate";
 import { user_columns, user_paddings } from "../../commons/column_type/user";
 import { GREY, PURPLE, YELLOW } from "../../../colors";
+import Profile from "../../commons/Profile";
 
 export default function UserPage() {
   const [users, setUsers] = useState([]);
@@ -78,14 +79,7 @@ export default function UserPage() {
       <GraphTemplate columns={columns} paddings={paddings}>
         {users.map((user) => (
           <List key={user.user_id} grid={columns.length}>
-            <UserWrapper>
-              <ProfileWrapper>
-                <ProfileImage>
-                  <img src={"data:image/png;base64," + user.profile} alt="" />
-                </ProfileImage>
-              </ProfileWrapper>
-              <UserInfo>{user.username}</UserInfo>
-            </UserWrapper>
+            <Profile profile={user.profile} username={user.username} />
             <UserInfo padding={paddings[1]}>{user.email}</UserInfo>
             <UserInfo padding={paddings[2]}>
               {user.created_date[0] +
@@ -144,13 +138,6 @@ const List = styled.li`
       : "repeat(auto-fit, minmax(25%, 1fr));"}; /* 자동으로 요소들 배치 */
 `;
 
-const UserWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  flex-shrink: 0; // UserWrapper가 필요한 크기만큼만 차지하도록 설정
-`;
-
 const UserInfo = styled.div`
   margin-left: ${(props) => (props.padding ? `${props.padding}px` : "0px")};
   color: #252733;
@@ -175,25 +162,4 @@ const Btn = styled.button`
   border-radius: 13px;
   border: none;
   cursor: ${(props) => (props.cursor ? "default" : "pointer")};
-`;
-
-const ProfileWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-right: 15px;
-`;
-
-const ProfileImage = styled.div`
-  background-color: white;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  overflow: hidden;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
 `;
