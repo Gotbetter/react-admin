@@ -6,7 +6,7 @@ export default function Profile({ profile, username }) {
     <UserWrapper>
       <ProfileWrapper>
         <ProfileImage>
-          <img src={"data:image/png;base64," + profile} alt="" />
+          <img src={"data:image/png;base64," + profile} alt='' />
         </ProfileImage>
       </ProfileWrapper>
       <UserInfo>{username}</UserInfo>

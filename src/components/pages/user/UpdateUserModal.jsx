@@ -7,27 +7,29 @@ import { updateUser } from "../../../api/user";
 export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
   const [username, setUsername] = useState("");
   const queryClient = useQueryClient();
-  console.log(user);
 
-  const { mutate: updateUserInfo } = useMutation(({userId, username}) => updateUser(userId, {username: username}), {
+  const { mutate: updateUserInfo } = useMutation(
+    ({ userId, username }) => updateUser(userId, { username: username }),
+    {
       onSuccess: async (res) => {
-          console.log('[UserPage]: update user info');
-          queryClient.invalidateQueries('users');
-          handleClickModal({});
+        console.log("[UserPage]: update user info");
+        queryClient.invalidateQueries("users");
+        handleClickModal({});
       },
       onError: (err) => {
-          const { status } = err.response;
-          if (status === 400) {
-            alert('모든 정보를 입력해 주세요.');
-          }
-          if (status === 403) {
-            alert('관리자가 아닙니다.');
-          }
-          if (status === 404) {
-            alert('존재하지 않는 회원입니다.');
-          }
+        const { status } = err.response;
+        if (status === 400) {
+          alert("모든 정보를 입력해 주세요.");
+        }
+        if (status === 403) {
+          alert("관리자가 아닙니다.");
+        }
+        if (status === 404) {
+          alert("존재하지 않는 회원입니다.");
+        }
       },
-  });
+    }
+  );
 
   useEffect(() => {
     if (!isClicked) {
@@ -41,31 +43,50 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
           <WhiteBox>
             <ProfileWrapper>
               <ProfileImage>
-                <img src={"data:image/png;base64," + user.profile} alt="" />
+                <img src={"data:image/png;base64," + user.profile} alt='' />
               </ProfileImage>
             </ProfileWrapper>
             <BtnProfile color={GREY}>프로필 수정</BtnProfile>
             <UserInfoWrapper>
               닉네임
-              <TextInput type="text" placeholder={user.username} onChange={(e) => setUsername(e.target.value)}/>
+              <TextInput
+                type='text'
+                placeholder={user.username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </UserInfoWrapper>
             <UserInfoWrapper>
               이메일
-              <TextInput type="text" placeholder={user.email} readOnly="true" />
+              <TextInput type='text' placeholder={user.email} readOnly='true' />
             </UserInfoWrapper>
             <UserInfoWrapper>
               권한
-              <TextInput type="text" placeholder={user.role_type} readOnly="true" />
+              <TextInput
+                type='text'
+                placeholder={user.role_type}
+                readOnly='true'
+              />
             </UserInfoWrapper>
             <UserInfoWrapper>
               수정 날짜
-              <TextInput type="text" placeholder={user.updated_date} readOnly="true" />
+              <TextInput
+                type='text'
+                placeholder={user.updated_date}
+                readOnly='true'
+              />
             </UserInfoWrapper>
             <ButtonWrapper>
               <Btn color={GREY} onClick={() => handleClickModal({})}>
                 취소
               </Btn>
-              <Btn color={YELLOW} onClick={() => updateUserInfo({userId: user.user_id, username: username})}>수정</Btn>
+              <Btn
+                color={YELLOW}
+                onClick={() =>
+                  updateUserInfo({ userId: user.user_id, username: username })
+                }
+              >
+                수정
+              </Btn>
             </ButtonWrapper>
           </WhiteBox>
         </ModalOutside>

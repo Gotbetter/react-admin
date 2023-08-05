@@ -74,7 +74,7 @@ export default function AdminPage() {
               )}
               {(user.role_type === "MAIN_ADMIN" ||
                 user.user_id === loginUser.user_id) && (
-                <Btn color={GREY} cursor="true">
+                <Btn color={GREY} cursor='true'>
                   {"해지"}
                 </Btn>
               )}

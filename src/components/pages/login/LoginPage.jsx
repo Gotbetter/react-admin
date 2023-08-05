@@ -52,13 +52,13 @@ export default function LoginPage() {
         <LogoBox>로고</LogoBox>
         <AppName>GotBetter Admin</AppName>
         <TextInput
-          type="text"
-          placeholder="아이디"
+          type='text'
+          placeholder='아이디'
           onChange={(e) => setAuthId(e.target.value)}
         />
         <TextInput
-          type="password"
-          placeholder="비밀번호"
+          type='password'
+          placeholder='비밀번호'
           onChange={(e) => setPassword(e.target.value)}
         />
         <LoginButton onClick={login}>로그인</LoginButton>

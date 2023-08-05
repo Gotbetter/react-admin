@@ -75,7 +75,7 @@ export default function UserPage() {
                   {"수정"}
                 </Btn>
               ) : (
-                <Btn color={GREY} cursor="true">
+                <Btn color={GREY} cursor='true'>
                   {"수정"}
                 </Btn>
               )}
@@ -90,7 +90,7 @@ export default function UserPage() {
                   {"삭제"}
                 </Btn>
               ) : (
-                <Btn color={GREY} cursor="true">
+                <Btn color={GREY} cursor='true'>
                   {"삭제"}
                 </Btn>
               )}

@@ -13,7 +13,7 @@ export default function MenuContent({ title, children }) {
           <UserName>{user.username}</UserName>
           <ProfileWrapper>
             <ProfileImage>
-              <img src={"data:image/png;base64," + user.profile} alt="" />
+              <img src={"data:image/png;base64," + user.profile} alt='' />
             </ProfileImage>
           </ProfileWrapper>
         </UserWrapper>

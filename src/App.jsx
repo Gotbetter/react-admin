@@ -21,7 +21,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/"
+              path='/'
               exact
               element={
                 <CheckLogin>
@@ -30,7 +30,7 @@ function App() {
               }
             />
             <Route
-              path="/rooms"
+              path='/rooms'
               exact
               element={
                 <CheckLogin>
@@ -39,7 +39,7 @@ function App() {
               }
             />
             <Route
-              path="/users"
+              path='/users'
               exact
               element={
                 <CheckLogin>
@@ -48,7 +48,7 @@ function App() {
               }
             />
             <Route
-              path="/commons"
+              path='/commons'
               exact
               element={
                 <CheckLogin>
@@ -57,7 +57,7 @@ function App() {
               }
             />
             <Route
-              path="/admins"
+              path='/admins'
               exact
               element={
                 <CheckLogin>
@@ -65,8 +65,8 @@ function App() {
                 </CheckLogin>
               }
             />
-            <Route path="/login" exact element={<LoginPage />} />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route path='/login' exact element={<LoginPage />} />
+            <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </RecoilRoot>
