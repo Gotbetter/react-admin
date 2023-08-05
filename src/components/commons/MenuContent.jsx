@@ -31,7 +31,6 @@ const Layout = styled.div`
   background-color: #f7f8fc;
   display: flex;
   flex-direction: column; /* UserWrapper와 BodyWrapper를 위아래로 정렬하기 위해 flex-direction: column 추가 */
-  display: flex;
 `;
 
 const HeaderWrapper = styled.div`
@@ -104,6 +103,7 @@ const BodyWrapper = styled.div`
 `;
 
 const WhiteBox = styled.div`
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   width: 100%;

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";

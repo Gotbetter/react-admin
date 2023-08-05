@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { loginTokenState } from "../../../recoil/login/loginTokenState";
 import { loginRequest } from "../../../api/user";
 import { useMutation } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 export default function LoginPage() {
   const [authId, setAuthId] = useState("");
   const [password, setPassword] = useState("");
-  const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
+  const setLoginToken = useSetRecoilState(loginTokenState);
 
   const navigate = useNavigate();
 
