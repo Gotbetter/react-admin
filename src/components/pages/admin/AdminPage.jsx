@@ -60,15 +60,9 @@ export default function AdminPage() {
           <List key={user.user_id} grid={columns.length}>
             <Profile profile={user.profile} username={user.username} />
             <UserInfo padding={paddings[1]}>{user.email}</UserInfo>
-            <UserInfo padding={paddings[2]}>
-              {user.created_date[0] +
-                "/" +
-                user.created_date[1] +
-                "/" +
-                user.created_date[2]}
-            </UserInfo>
+            <UserInfo padding={paddings[2]}>{user.created_date}</UserInfo>
             <UserInfo padding={paddings[3]}>
-              {user.role_type === "USER" ? (
+              {user.role_type === "USER" && (
                 <Btn
                   onClick={() =>
                     updateRoleType({ userId: user.user_id, approve: true })
@@ -77,27 +71,27 @@ export default function AdminPage() {
                 >
                   {"승인"}
                 </Btn>
-              ) : (
-                <Btn
-                  onClick={() =>
-                    updateRoleType({ userId: user.user_id, approve: false })
-                  }
-                  color={
-                    user.role_type === "MAIN_ADMIN" ||
-                    user.user_id === loginUser.user_id
-                      ? GREY
-                      : PURPLE
-                  }
-                  cursor={
-                    user.role_type === "MAIN_ADMIN" ||
-                    user.user_id === loginUser.user_id
-                      ? true
-                      : false
-                  }
-                >
+              )}
+              {(user.role_type === "MAIN_ADMIN" ||
+                user.user_id === loginUser.user_id) && (
+                <Btn color={GREY} cursor="true">
                   {"해지"}
                 </Btn>
               )}
+              {!(
+                user.role_type === "MAIN_ADMIN" ||
+                user.user_id === loginUser.user_id
+              ) &&
+                user.role_type === "ADMIN" && (
+                  <Btn
+                    onClick={() =>
+                      updateRoleType({ userId: user.user_id, approve: false })
+                    }
+                    color={PURPLE}
+                  >
+                    {"해지"}
+                  </Btn>
+                )}
             </UserInfo>
           </List>
         ))}

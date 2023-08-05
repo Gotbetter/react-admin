@@ -9,9 +9,12 @@ import GraphTemplate from "../../commons/GraphTemplate";
 import { user_columns, user_paddings } from "../../commons/column_type/user";
 import { GREY, PURPLE, YELLOW } from "../../../colors";
 import Profile from "../../commons/Profile";
+import UpdateUserModal from "./UpdateUserModal";
 
 export default function UserPage() {
   const [users, setUsers] = useState([]);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [updateUserInfo, setUpdateUserInfo] = useState({});
   const loginUser = useRecoilValue(userState);
   const queryClient = useQueryClient();
   const paddings = user_paddings;
@@ -51,28 +54,10 @@ export default function UserPage() {
     }
   );
 
-  // const { mutate: updateRoleType } = useMutation(({userId, approve}) => adminChangeReuqest(userId, {approve: approve}), {
-  //     onSuccess: async (res) => {
-  //         console.log('[AdminPage]: update role type');
-  //         queryClient.invalidateQueries('users');
-  //     },
-  //     onError: (err) => {
-  //         const { status } = err.response;
-  //         if (status === 400) {
-  //           alert('모든 정보를 입력해 주세요.');
-  //         }
-  //         if (status === 403) {
-  //           alert('메인 관리자가 아닙니다.');
-  //         }
-  //         if (status === 404) {
-  //           alert('존재하지 않는 회원입니다.');
-  //         }
-  //         if (status === 409) {
-  //           alert('이미 수정된 정보입니다.');
-  //         }
-  //     },
-
-  // });
+  const handleClickModal = (user) => {
+    setUpdateUserInfo(user);
+    setUpdateModal(!updateModal);
+  };
 
   return (
     <ContentArea tab={"/users"} title={"회원 관리"}>
@@ -81,24 +66,14 @@ export default function UserPage() {
           <List key={user.user_id} grid={columns.length}>
             <Profile profile={user.profile} username={user.username} />
             <UserInfo padding={paddings[1]}>{user.email}</UserInfo>
-            <UserInfo padding={paddings[2]}>
-              {user.created_date[0] +
-                "/" +
-                user.created_date[1] +
-                "/" +
-                user.created_date[2]}
-            </UserInfo>
-            <UserInfo padding={paddings[3]}>
-              {user.updated_date[0] +
-                "/" +
-                user.updated_date[1] +
-                "/" +
-                user.updated_date[2]}
-            </UserInfo>
+            <UserInfo padding={paddings[2]}>{user.created_date}</UserInfo>
+            <UserInfo padding={paddings[3]}>{user.updated_date}</UserInfo>
             <UserInfo padding={paddings[4]}>
               {user.role_type === "USER" &&
               user.user_id !== loginUser.user_id ? (
-                <Btn color={YELLOW}>{"수정"}</Btn>
+                <Btn color={YELLOW} onClick={() => handleClickModal(user)}>
+                  {"수정"}
+                </Btn>
               ) : (
                 <Btn color={GREY} cursor="true">
                   {"수정"}
@@ -123,6 +98,11 @@ export default function UserPage() {
           </List>
         ))}
       </GraphTemplate>
+      <UpdateUserModal
+        isClicked={updateModal}
+        handleClickModal={handleClickModal}
+        user={updateUserInfo}
+      />
     </ContentArea>
   );
 }
