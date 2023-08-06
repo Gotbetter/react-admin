@@ -31,7 +31,7 @@ export default function AdminPage() {
   const { mutate: updateRoleType } = useMutation(
     ({ userId, approve }) => adminChangeReuqest(userId, { approve: approve }),
     {
-      onSuccess: async (res) => {
+      onSuccess: async () => {
         console.log("[AdminPage]: update role type");
         queryClient.invalidateQueries("usersforAdmin");
       },

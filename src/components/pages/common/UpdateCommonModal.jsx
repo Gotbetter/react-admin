@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { BLUE, GREY, YELLOW } from "../../../colors";
 import { styled } from "styled-components";
@@ -23,7 +24,7 @@ export default function UpdateCommonModal({
         attribute2: attribute2,
       }),
     {
-      onSuccess: async (res) => {
+      onSuccess: async () => {
         console.log("[CommonPage]: update common info");
         queryClient.invalidateQueries("commons");
         handleClickModal({});
@@ -47,7 +48,7 @@ export default function UpdateCommonModal({
     if (!isClicked) {
       setCodeDescription("");
     }
-  });
+  }, [isClicked]);
 
   return (
     <div>

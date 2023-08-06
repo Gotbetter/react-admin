@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { GREY, YELLOW } from "../../../colors";
@@ -11,7 +12,7 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
   const { mutate: updateUserInfo } = useMutation(
     ({ userId, username }) => updateUser(userId, { username: username }),
     {
-      onSuccess: async (res) => {
+      onSuccess: async () => {
         console.log("[UserPage]: update user info");
         queryClient.invalidateQueries("users");
         handleClickModal({});
@@ -35,7 +36,7 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
     if (!isClicked) {
       setUsername("");
     }
-  });
+  }, [isClicked]);
 
   return (
     <div>

@@ -47,7 +47,7 @@ export default function UserPage() {
           alert("존재하지 않는 회원입니다.");
         }
       },
-      onSuccess: async (res) => {
+      onSuccess: async () => {
         console.log("[UserPage]: delete user");
         queryClient.invalidateQueries(["users"]);
       },
