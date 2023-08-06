@@ -1,8 +1,8 @@
-const admin_paddings = [0, 70, 200, 154];
+const admin_paddings = [0, 70, 200, 200, 154];
 const admin_columns = [
   {
     id: 0,
-    title: "관리자",
+    title: "회원",
   },
   {
     id: 1,
@@ -14,6 +14,10 @@ const admin_columns = [
   },
   {
     id: 3,
+    title: "유형",
+  },
+  {
+    id: 4,
     title: "권한 관리",
   },
 ];

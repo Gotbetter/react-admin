@@ -61,7 +61,8 @@ export default function AdminPage() {
             <Profile profile={user.profile} username={user.username} />
             <UserInfo padding={paddings[1]}>{user.email}</UserInfo>
             <UserInfo padding={paddings[2]}>{user.created_date}</UserInfo>
-            <UserInfo padding={paddings[3]}>
+            <UserInfo padding={paddings[3]}>{user.role_type}</UserInfo>
+            <UserInfo padding={paddings[4]}>
               {user.role_type === "USER" && (
                 <Btn
                   onClick={() =>
