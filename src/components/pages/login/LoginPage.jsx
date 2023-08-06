@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { loginTokenState } from "../../../recoil/login/loginTokenState";
 import { loginRequest } from "../../../api/user";
 import { useMutation } from "@tanstack/react-query";
+import UserData from "./UserData";
 
 export default function LoginPage() {
+  const [isLogin, setIsLogin] = useState(false);
   const [authId, setAuthId] = useState("");
   const [password, setPassword] = useState("");
-  const setLoginToken = useSetRecoilState(loginTokenState);
+  const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
 
-  const navigate = useNavigate();
-
-  const { mutate: login } = useMutation(
-    () => loginRequest({ auth_id: authId, password: password }, true),
+  const { mutate: loginFunc } = useMutation(
+    ({ auth_id, password, admin }) =>
+      loginRequest({ auth_id: auth_id, password: password }, admin),
     {
-      onError: (err) => {
+      onError: async (err) => {
         const { status } = err.response;
-        // console.log(format(err.response));
+        console.log(err);
         // setError(true);
         if (status === 400) {
           alert("모든 정보를 입력해 주세요.");
@@ -34,14 +34,14 @@ export default function LoginPage() {
         }
       },
       onSuccess: async (res) => {
-        // console.log(format(res.data));
         const { access_token, refresh_token } = res.data;
         setLoginToken({
           accessToken: access_token,
           refreshToken: refresh_token,
         });
-        // alert('로그인 성공');
-        navigate("/rooms");
+        setAuthId("");
+        setPassword("");
+        setIsLogin(true);
       },
     }
   );
@@ -61,8 +61,15 @@ export default function LoginPage() {
           placeholder='비밀번호'
           onChange={(e) => setPassword(e.target.value)}
         />
-        <LoginButton onClick={login}>로그인</LoginButton>
+        <LoginButton
+          onClick={() =>
+            loginFunc({ auth_id: authId, password: password, admin: true })
+          }
+        >
+          로그인
+        </LoginButton>
       </WhiteBox>
+      {isLogin && <UserData />}
     </Layout>
   );
 }

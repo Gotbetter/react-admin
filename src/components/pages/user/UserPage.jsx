@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ContentArea from "../../commons/ContentArea";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "../../../recoil/user/userState";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteUser, fetchUsers } from "../../../api/user";
@@ -10,6 +10,8 @@ import { user_columns, user_paddings } from "../../commons/column_type/user";
 import { GREY, PURPLE, YELLOW } from "../../../colors";
 import Profile from "../../commons/Profile";
 import UpdateUserModal from "./UpdateUserModal";
+import { loginState } from "../../../recoil/login/loginState";
+import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
   const [users, setUsers] = useState([]);
@@ -19,14 +21,24 @@ export default function UserPage() {
   const queryClient = useQueryClient();
   const paddings = user_paddings;
   const columns = user_columns;
+  const setIsLogin = useSetRecoilState(loginState);
+  const navigate = useNavigate();
 
   const fetchUsersQuery = useQuery(["users"], fetchUsers, {
+    retry: 1,
     onSuccess: async (data) => {
       console.log("[UserPage]: fetching users info");
       setUsers([...data]);
     },
-    onError: async () => {
-      alert("전체 사용자 정보 조회 실패");
+    onError: async (err) => {
+      const { status } = err.response;
+      if (status === 403) {
+        alert("권한이 없습니다.");
+        setIsLogin(false);
+        navigate("/notfound");
+      } else {
+        alert("전체 사용자 정보 조회 실패");
+      }
     },
     select: (res) => res.data,
   });
