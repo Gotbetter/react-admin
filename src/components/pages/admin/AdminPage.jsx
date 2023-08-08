@@ -5,10 +5,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminChangeReuqest, fetchUsers } from "../../../api/user";
 import GraphTemplate from "../../commons/GraphTemplate";
 import { admin_columns, admin_paddings } from "../../commons/column_type/admin";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "../../../recoil/user/userState";
 import { GREEN, GREY, PURPLE } from "../../../colors";
 import Profile from "../../commons/Profile";
+import { loginState } from "../../../recoil/login/loginState";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminPage() {
   const [users, setUsers] = useState([]);
@@ -16,14 +18,26 @@ export default function AdminPage() {
   const queryClient = useQueryClient();
   const paddings = admin_paddings;
   const columns = admin_columns;
+  const setIsLogin = useSetRecoilState(loginState);
+  const navigate = useNavigate();
 
   const fetchUsersQuery = useQuery(["usersforAdmin"], fetchUsers, {
+    retry: 1,
     onSuccess: async (data) => {
       console.log("[AdminPage]: fetching users info");
       setUsers([...data]);
     },
-    onError: async () => {
-      alert("전체 사용자 정보 조회 실패");
+    onError: async (err) => {
+      const errorType = err.response.data.errors[0].errorType;
+      const { status } = err.response;
+
+      if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
+        alert("권한이 없습니다.");
+        setIsLogin(false);
+        navigate("/notfound");
+      } else {
+        alert("전체 사용자 정보 조회 실패");
+      }
     },
     select: (res) => res.data,
   });
@@ -31,12 +45,20 @@ export default function AdminPage() {
   const { mutate: updateRoleType } = useMutation(
     ({ userId, approve }) => adminChangeReuqest(userId, { approve: approve }),
     {
+      retry: 1,
       onSuccess: async () => {
         console.log("[AdminPage]: update role type");
         queryClient.invalidateQueries("usersforAdmin");
       },
       onError: (err) => {
+        const errorType = err.response.data.errors[0].errorType;
         const { status } = err.response;
+
+        if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
+          alert("권한이 없습니다.");
+          setIsLogin(false);
+          navigate("/notfound");
+        }
         if (status === 400) {
           alert("모든 정보를 입력해 주세요.");
         }
