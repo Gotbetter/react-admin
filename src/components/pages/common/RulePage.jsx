@@ -25,8 +25,10 @@ export default function RulePage({ handleClickModal }) {
         setRules([...data]);
       },
       onError: async (err) => {
+        const errorType = err.response.data.errors[0].errorType;
         const { status } = err.response;
-        if (status === 403) {
+
+        if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
           alert("권한이 없습니다.");
           setIsLogin(false);
           navigate("/notfound");

@@ -7,21 +7,34 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchRooms } from "../../../api/room";
 import ArrowIcon from "../../../assets/arrowIcon.svg";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { loginState } from "../../../recoil/login/loginState";
 
 export default function RoomPage() {
   const paddings = room_paddings;
   const columns = room_columns;
   const navigate = useNavigate();
+  const setIsLogin = useSetRecoilState(loginState);
 
   const [rooms, setRooms] = useState([]);
 
   const fetchRoomsQuery = useQuery(["rooms"], fetchRooms, {
+    retry: 1,
     onSuccess: async (data) => {
       console.log("[RoomPage]: fetching rooms info");
       setRooms([...data]);
     },
-    onError: async () => {
-      // alert('전체 사용자 정보 조회 실패');
+    onError: async (err) => {
+      const errorType = err.response.data.errors[0].errorType;
+      const { status } = err.response;
+
+      if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
+        alert("권한이 없습니다.");
+        setIsLogin(false);
+        navigate("/notfound");
+      } else {
+        alert("전체 방 정보 조회 실패");
+      }
     },
     select: (res) => res.data,
   });

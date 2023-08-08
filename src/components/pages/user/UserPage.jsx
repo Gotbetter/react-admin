@@ -31,8 +31,10 @@ export default function UserPage() {
       setUsers([...data]);
     },
     onError: async (err) => {
+      const errorType = err.response.data.errors[0].errorType;
       const { status } = err.response;
-      if (status === 403) {
+
+      if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
         alert("권한이 없습니다.");
         setIsLogin(false);
         navigate("/notfound");
@@ -46,9 +48,17 @@ export default function UserPage() {
   const { mutate: deleteAUser } = useMutation(
     ({ userId }) => deleteUser(userId),
     {
+      retry: 1,
       staleTime: Infinity,
       onError: (err) => {
         const { status } = err.response;
+        const errorType = err.response.data.errors[0].errorType;
+
+        if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
+          alert("권한이 없습니다.");
+          setIsLogin(false);
+          navigate("/notfound");
+        }
         if (status === 400) {
           alert("모든 정보를 입력해 주세요.");
         }
