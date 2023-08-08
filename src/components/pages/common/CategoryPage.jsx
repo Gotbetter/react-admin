@@ -1,36 +1,49 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import {
-  common_columns,
-  common_paddings,
+  category_columns,
+  category_paddings,
 } from "../../commons/column_type/common";
-import { fetchCommons } from "../../../api/common";
+import { fetchCategories } from "../../../api/common";
 import { useQuery } from "@tanstack/react-query";
 import Profile from "../../commons/Profile";
 import { PURPLE, YELLOW } from "../../../colors";
+import { useSetRecoilState } from "recoil";
+import { loginState } from "../../../recoil/login/loginState";
+import { useNavigate } from "react-router-dom";
+import { Btn, CommonInfo, List } from "./CommonStyle";
 
 export default function CategoryPage({ handleClickModal }) {
-  const paddings = common_paddings;
-  const columns = common_columns;
-  const [commons, setCommons] = useState([]);
+  const paddings = category_paddings;
+  const columns = category_columns;
+  const [categories, setCategories] = useState([]);
+  const setIsLogin = useSetRecoilState(loginState);
+  const navigate = useNavigate();
 
-  const fetchCommonsQuery = useQuery(
-    ["commons"],
-    ({ queryKey }) => fetchCommons(true),
+  const fetchCategoriesQuery = useQuery(
+    ["categories"],
+    ({ queryKey }) => fetchCategories(true),
     {
+      retry: 1,
       onSuccess: async (data) => {
-        console.log("[CommonPage]: fetching commons info");
-        setCommons([...data]);
+        console.log("[CategoryPage]: fetching categories info");
+        setCategories([...data]);
       },
-      onError: async () => {
-        alert("전체 공통 코드 정보 조회 실패");
+      onError: async (err) => {
+        const { status } = err.response;
+        if (status === 403) {
+          alert("권한이 없습니다.");
+          setIsLogin(false);
+          navigate("/notfound");
+        } else {
+          alert("전체 카테고리 정보 조회 실패");
+        }
       },
       select: (res) => res.data,
     }
   );
 
   // const { mutate: deleteACommon } = useMutation(
-  //   ({ userId }) => deleteUser(userId),
+  //   ({ userId }) => deleteCommon(userId),
   //   {
   //     staleTime: Infinity,
   //     onError: (err) => {
@@ -54,19 +67,22 @@ export default function CategoryPage({ handleClickModal }) {
 
   return (
     <>
-      {commons.map((common) => (
-        <List grid={columns.length}>
+      {categories.map((category) => (
+        <List grid={columns.length} key={category.order}>
           <Profile
-            profile={common.room_category_image}
-            username={common.room_category_code}
+            profile={category.room_category_image}
+            username={category.room_category_code}
           />
           <CommonInfo padding={paddings[1]}>
-            {common.room_category_description}
+            {category.room_category_description}
           </CommonInfo>
-          <CommonInfo padding={paddings[2]}>{common.updated_date}</CommonInfo>
-          <CommonInfo padding={paddings[3]}>{common.updated_by}</CommonInfo>
+          <CommonInfo padding={paddings[2]}>{category.updated_date}</CommonInfo>
+          <CommonInfo padding={paddings[3]}>{category.updated_by}</CommonInfo>
           <CommonInfo padding={paddings[4]}>
-            <Btn color={YELLOW} onClick={() => handleClickModal(common)}>
+            <Btn
+              color={YELLOW}
+              onClick={() => handleClickModal(category, false, false)}
+            >
               {"수정"}
             </Btn>
           </CommonInfo>
@@ -78,40 +94,3 @@ export default function CategoryPage({ handleClickModal }) {
     </>
   );
 }
-
-const List = styled.li`
-  align-items: center;
-  padding: 24px 31px 24px 31px; // top right bottom left: ;
-  border-bottom: 1px solid #dfe0eb;
-  display: grid;
-  grid-template-columns: ${(props) =>
-    props.grid
-      ? `repeat(auto-fit, minmax(${props.grid}%, 1fr));`
-      : "repeat(auto-fit, minmax(25%, 1fr));"}; /* 자동으로 요소들 배치 */
-`;
-
-const CommonInfo = styled.div`
-  margin-left: ${(props) => (props.padding ? `${props.padding}px` : "0px")};
-  color: #252733;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 20px; /* 142.857% */
-  letter-spacing: 0.2px;
-`;
-
-const Btn = styled.button`
-  width: 54px;
-  height: 24px;
-  background-color: ${(props) => (props.color ? `${props.color}` : "black")};
-  color: white;
-  text-align: center;
-  font-size: 11px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: 0.2px;
-  border-radius: 13px;
-  border: none;
-  cursor: ${(props) => (props.cursor ? "default" : "pointer")};
-`;

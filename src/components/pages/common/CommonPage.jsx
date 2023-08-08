@@ -2,27 +2,28 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ContentArea from "../../commons/ContentArea";
 import {
-  common_columns,
-  common_paddings,
+  category_columns,
+  category_paddings,
+  rule_columns,
+  rule_paddings,
 } from "../../commons/column_type/common";
 import GraphTemplate from "../../commons/GraphTemplate";
 import UpdateCommonModal from "./UpdateCommonModal";
 import CategoryPage from "./CategoryPage";
+import RulePage from "./RulePage";
 
 export default function CommonPage() {
   const [updateModal, setUpdateModal] = useState(false);
   const [updateCommonInfo, setUpdateCommonInfo] = useState({});
   const [selectedOption, setSelectedOption] = useState("카테고리");
-  const paddings = common_paddings;
-  const columns = common_columns;
+  const [isRule, setIsRule] = useState(false);
+  const [isNew, setIsNew] = useState(false);
 
-  const handleClickModal = (common) => {
+  const handleClickModal = (common, isRule, isNew) => {
+    setIsNew(isNew);
+    setIsRule(isRule);
     setUpdateCommonInfo(common);
     setUpdateModal(!updateModal);
-  };
-
-  const test = () => {
-    console.log("aa");
   };
 
   return (
@@ -32,19 +33,29 @@ export default function CommonPage() {
           <option value='카테고리'>카테고리</option>
           <option value='규칙'>규칙</option>
         </Select>
-        <Btn onClick={() => handleClickModal({})}>추가</Btn>
+        <Btn
+          onClick={() =>
+            handleClickModal({}, selectedOption === "규칙" ? true : false, true)
+          }
+        >
+          추가
+        </Btn>
       </SelectWrapper>
 
       {selectedOption === "카테고리" ? (
-        <GraphTemplate columns={columns} paddings={paddings}>
+        <GraphTemplate columns={category_columns} paddings={category_paddings}>
           <CategoryPage handleClickModal={handleClickModal} />
         </GraphTemplate>
       ) : (
-        <></>
+        <GraphTemplate columns={rule_columns} paddings={rule_paddings}>
+          <RulePage handleClickModal={handleClickModal} />
+        </GraphTemplate>
       )}
       <UpdateCommonModal
         isClicked={updateModal}
         handleClickModal={handleClickModal}
+        isRule={isRule}
+        isNew={isNew}
         common={updateCommonInfo}
       />
     </ContentArea>

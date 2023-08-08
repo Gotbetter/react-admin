@@ -35,8 +35,10 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
   useEffect(() => {
     if (!isClicked) {
       setUsername("");
+    } else {
+      setUsername(user.username);
     }
-  }, [isClicked]);
+  }, [isClicked, user.username]);
 
   return (
     <div>
@@ -59,14 +61,14 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
             </UserInfoWrapper>
             <UserInfoWrapper>
               이메일
-              <TextInput type='text' placeholder={user.email} readOnly='true' />
+              <TextInput type='text' placeholder={user.email} readOnly={true} />
             </UserInfoWrapper>
             <UserInfoWrapper>
               권한
               <TextInput
                 type='text'
                 placeholder={user.role_type}
-                readOnly='true'
+                readOnly={true}
               />
             </UserInfoWrapper>
             <UserInfoWrapper>
@@ -74,7 +76,7 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
               <TextInput
                 type='text'
                 placeholder={user.updated_date}
-                readOnly='true'
+                readOnly={true}
               />
             </UserInfoWrapper>
             <ButtonWrapper>
@@ -84,7 +86,7 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
               <Btn
                 color={YELLOW}
                 onClick={() =>
-                  username !== ""
+                  username !== "" && username !== user.username
                     ? updateUserInfo({
                         userId: user.user_id,
                         username: username,
@@ -209,8 +211,10 @@ const TextInput = styled.input`
   margin: 10px 0;
   border-radius: 8px;
   color: #bdbdbd;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.2px;
   border: 1px solid var(--grayscale-divider, #dfe0eb);
-  font-variant-numeric: lining-nums proportional-nums;
   margin: 5px;
 
   /* 읽기 전용일 때 스타일 변경 */
