@@ -9,6 +9,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../recoil/login/loginState";
 import { userState } from "../recoil/user/userState";
+import RoomDetailPage from "./pages/room/RoomDetailPage";
 
 export default function RoutePage() {
   const isLogin = useRecoilValue(loginState);
@@ -25,6 +26,7 @@ export default function RoutePage() {
         <>
           <Route path='/' exact element={<DashPage />} />
           <Route path='/rooms' exact element={<RoomPage />} />
+          <Route path='/rooms/:roomId' exact element={<RoomDetailPage />} />
           <Route path='/users' exact element={<UserPage />} />
           <Route path='/commons' exact element={<CommonPage />} />
           <Route path='/admins' exact element={<AdminPage />} />

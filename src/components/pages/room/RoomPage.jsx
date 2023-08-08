@@ -5,10 +5,13 @@ import { room_columns, room_paddings } from "../../commons/column_type/room";
 import GraphTemplate from "../../commons/GraphTemplate";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRooms } from "../../../api/room";
+import ArrowIcon from "../../../assets/arrowIcon.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function RoomPage() {
   const paddings = room_paddings;
   const columns = room_columns;
+  const navigate = useNavigate();
 
   const [rooms, setRooms] = useState([]);
 
@@ -33,8 +36,13 @@ export default function RoomPage() {
             <RoomInfo padding={paddings[2]}>{room.room_category}</RoomInfo>
             <RoomInfo padding={paddings[3]}>{room.rule}</RoomInfo>
             <RoomInfo padding={paddings[4]}>{room.start_date}</RoomInfo>
-            <RoomInfo padding={paddings[5]}>{room.end_date}</RoomInfo>
-            <ArrowButton />
+            <RoomInfo padding={paddings[5]}>
+              {room.end_date}
+              <ArrowButton
+                src={ArrowIcon}
+                onClick={() => navigate(`/rooms/${room.room_id}`)}
+              />
+            </RoomInfo>
           </List>
         ))}
       </GraphTemplate>
@@ -61,29 +69,14 @@ const RoomInfo = styled.div`
   font-weight: 600;
   line-height: 20px; /* 142.857% */
   letter-spacing: 0.2px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const ArrowButton = styled.div`
-  width: 40px;
-  height: 40px;
-  background-color: #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const ArrowButton = styled.img`
+  width: 16px;
+  height: 16px;
   cursor: pointer;
-
-  .arrow-up,
-  .arrow-down {
-    border: solid #000;
-    border-width: 0 2px 2px 0;
-    padding: 6px;
-  }
-
-  .arrow-up {
-    transform: rotate(-135deg);
-  }
-
-  .arrow-down {
-    transform: rotate(45deg);
-  }
 `;

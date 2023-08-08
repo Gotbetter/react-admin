@@ -1,5 +1,5 @@
 // const room_paddings = [0, 70, 180, 180, 150, 100]
-const room_paddings = [0, 100, 90, 90, 60, 40];
+const room_paddings = [0, 60, 90, 90, 60, 40];
 const room_columns = [
   {
     id: 0,
