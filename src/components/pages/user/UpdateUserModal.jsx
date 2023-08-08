@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { GREY, YELLOW } from "../../../colors";
@@ -7,33 +8,38 @@ import { updateUser } from "../../../api/user";
 export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
   const [username, setUsername] = useState("");
   const queryClient = useQueryClient();
-  console.log(user);
 
-  const { mutate: updateUserInfo } = useMutation(({userId, username}) => updateUser(userId, {username: username}), {
-      onSuccess: async (res) => {
-          console.log('[UserPage]: update user info');
-          queryClient.invalidateQueries('users');
-          handleClickModal({});
+  const { mutate: updateUserInfo } = useMutation(
+    ({ userId, username }) => updateUser(userId, { username: username }),
+    {
+      onSuccess: async () => {
+        console.log("[UserPage]: update user info");
+        queryClient.invalidateQueries("users");
+        handleClickModal({});
       },
       onError: (err) => {
-          const { status } = err.response;
-          if (status === 400) {
-            alert('모든 정보를 입력해 주세요.');
-          }
-          if (status === 403) {
-            alert('관리자가 아닙니다.');
-          }
-          if (status === 404) {
-            alert('존재하지 않는 회원입니다.');
-          }
+        const { status } = err.response;
+        if (status === 400) {
+          alert("모든 정보를 입력해 주세요.");
+        }
+        if (status === 403) {
+          alert("관리자가 아닙니다.");
+        }
+        if (status === 404) {
+          alert("존재하지 않는 회원입니다.");
+        }
       },
-  });
+    }
+  );
 
   useEffect(() => {
     if (!isClicked) {
       setUsername("");
+    } else {
+      setUsername(user.username);
     }
-  });
+  }, [isClicked, user.username]);
+
   return (
     <div>
       {isClicked && (
@@ -41,31 +47,55 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
           <WhiteBox>
             <ProfileWrapper>
               <ProfileImage>
-                <img src={"data:image/png;base64," + user.profile} alt="" />
+                <img src={"data:image/png;base64," + user.profile} alt='' />
               </ProfileImage>
             </ProfileWrapper>
             <BtnProfile color={GREY}>프로필 수정</BtnProfile>
             <UserInfoWrapper>
               닉네임
-              <TextInput type="text" placeholder={user.username} onChange={(e) => setUsername(e.target.value)}/>
+              <TextInput
+                type='text'
+                placeholder={user.username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </UserInfoWrapper>
             <UserInfoWrapper>
               이메일
-              <TextInput type="text" placeholder={user.email} readOnly="true" />
+              <TextInput type='text' placeholder={user.email} readOnly={true} />
             </UserInfoWrapper>
             <UserInfoWrapper>
               권한
-              <TextInput type="text" placeholder={user.role_type} readOnly="true" />
+              <TextInput
+                type='text'
+                placeholder={user.role_type}
+                readOnly={true}
+              />
             </UserInfoWrapper>
             <UserInfoWrapper>
               수정 날짜
-              <TextInput type="text" placeholder={user.updated_date} readOnly="true" />
+              <TextInput
+                type='text'
+                placeholder={user.updated_date}
+                readOnly={true}
+              />
             </UserInfoWrapper>
             <ButtonWrapper>
               <Btn color={GREY} onClick={() => handleClickModal({})}>
                 취소
               </Btn>
-              <Btn color={YELLOW} onClick={() => updateUserInfo({userId: user.user_id, username: username})}>수정</Btn>
+              <Btn
+                color={YELLOW}
+                onClick={() =>
+                  username !== "" && username !== user.username
+                    ? updateUserInfo({
+                        userId: user.user_id,
+                        username: username,
+                      })
+                    : handleClickModal({})
+                }
+              >
+                수정
+              </Btn>
             </ButtonWrapper>
           </WhiteBox>
         </ModalOutside>
@@ -181,8 +211,10 @@ const TextInput = styled.input`
   margin: 10px 0;
   border-radius: 8px;
   color: #bdbdbd;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.2px;
   border: 1px solid var(--grayscale-divider, #dfe0eb);
-  font-variant-numeric: lining-nums proportional-nums;
   margin: 5px;
 
   /* 읽기 전용일 때 스타일 변경 */

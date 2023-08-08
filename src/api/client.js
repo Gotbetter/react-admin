@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  loginTokenSelector,
-  loginTokenState,
-} from "../recoil/login/loginTokenState";
-import format from "pretty-format";
+// import { useRecoilState, useRecoilValue } from "recoil";
+// import {
+//   loginTokenSelector,
+//   loginTokenState,
+// } from "../recoil/login/loginTokenState";
+// import format from "pretty-format";
 
 axios.defaults.withCredentials = true;
 //const accessToken = localStorage.getItem('access_token');
@@ -19,7 +19,7 @@ client.interceptors.request.use(async (config) => {
     return config;
   }
 
-  if (config.url === "users/login/admin") {
+  if (config.url === "users/login") {
     return config;
   }
 
@@ -72,29 +72,31 @@ client.interceptors.response.use(
   }
 );
 
-const refreshToken = async (refreshToken, setLoginToken) => {
-  console.log("refresh access_token");
+// const
 
-  const {
-    data: { access_token, refresh_token },
-  } = await client
-    .post(
-      `/users/reissue`,
-      {},
-      {
-        headers: {
-          authorization: `Bearer ${refreshToken}`,
-        },
-      }
-    )
-    .catch((err) => {
-      console.log(err);
-    });
+// const refreshToken = async (refreshToken, setLoginToken) => {
+//   console.log("refresh access_token");
 
-  setLoginToken({
-    accessToken: access_token,
-    refreshToken: refresh_token,
-  });
+//   const {
+//     data: { access_token, refresh_token },
+//   } = await client
+//     .post(
+//       `/users/reissue`,
+//       {},
+//       {
+//         headers: {
+//           authorization: `Bearer ${refreshToken}`,
+//         },
+//       }
+//     )
+//     .catch((err) => {
+//       console.log(err);
+//     });
 
-  return access_token;
-};
+//   setLoginToken({
+//     accessToken: access_token,
+//     refreshToken: refresh_token,
+//   });
+
+//   return access_token;
+// };

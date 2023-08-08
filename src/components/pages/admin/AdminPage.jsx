@@ -31,7 +31,7 @@ export default function AdminPage() {
   const { mutate: updateRoleType } = useMutation(
     ({ userId, approve }) => adminChangeReuqest(userId, { approve: approve }),
     {
-      onSuccess: async (res) => {
+      onSuccess: async () => {
         console.log("[AdminPage]: update role type");
         queryClient.invalidateQueries("usersforAdmin");
       },
@@ -61,7 +61,8 @@ export default function AdminPage() {
             <Profile profile={user.profile} username={user.username} />
             <UserInfo padding={paddings[1]}>{user.email}</UserInfo>
             <UserInfo padding={paddings[2]}>{user.created_date}</UserInfo>
-            <UserInfo padding={paddings[3]}>
+            <UserInfo padding={paddings[3]}>{user.role_type}</UserInfo>
+            <UserInfo padding={paddings[4]}>
               {user.role_type === "USER" && (
                 <Btn
                   onClick={() =>
@@ -74,7 +75,7 @@ export default function AdminPage() {
               )}
               {(user.role_type === "MAIN_ADMIN" ||
                 user.user_id === loginUser.user_id) && (
-                <Btn color={GREY} cursor="true">
+                <Btn color={GREY} cursor='true'>
                   {"해지"}
                 </Btn>
               )}
