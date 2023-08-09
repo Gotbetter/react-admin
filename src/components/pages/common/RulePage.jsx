@@ -3,38 +3,27 @@ import { rule_columns, rule_paddings } from "../../commons/column_type/common";
 import { fetchRules } from "../../../api/common";
 import { useQuery } from "@tanstack/react-query";
 import { PURPLE, YELLOW } from "../../../colors";
-import { useSetRecoilState } from "recoil";
-import { loginState } from "../../../recoil/login/loginState";
-import { useNavigate } from "react-router-dom";
 import { Btn, CommonInfo, List } from "./CommonStyle";
+import { useErrorHandling } from "../../../api/useErrorHandling";
+import { useApiError } from "../../../api/useApiError";
 
 export default function RulePage({ handleClickModal }) {
   const paddings = rule_paddings;
   const columns = rule_columns;
   const [rules, setRules] = useState([]);
-  const setIsLogin = useSetRecoilState(loginState);
-  const navigate = useNavigate();
+
+  const errorhandling = useErrorHandling();
+  const { handleError } = useApiError(undefined, errorhandling);
 
   const fetchRulesQuery = useQuery(
     ["rules"],
     ({ queryKey }) => fetchRules(true),
     {
       retry: 1,
+      onError: handleError,
       onSuccess: async (data) => {
         console.log("[RulePage]: fetching rules info");
         setRules([...data]);
-      },
-      onError: async (err) => {
-        const errorType = err.response.data.errors[0].errorType;
-        const { status } = err.response;
-
-        if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
-          alert("권한이 없습니다.");
-          setIsLogin(false);
-          navigate("/notfound");
-        } else {
-          alert("전체 규칙 정보 조회 실패");
-        }
       },
       select: (res) => res.data,
     }

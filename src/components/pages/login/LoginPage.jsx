@@ -5,6 +5,8 @@ import { loginTokenState } from "../../../recoil/login/loginTokenState";
 import { loginRequest } from "../../../api/user";
 import { useMutation } from "@tanstack/react-query";
 import UserData from "./UserData";
+import { useErrorHandling } from "../../../api/useErrorHandling";
+import { useApiError } from "../../../api/useApiError";
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(false);
@@ -12,27 +14,21 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
 
+  const errorhandling = useErrorHandling();
+  const { handleError } = useApiError(
+    {
+      404: {
+        NOT_FOUND: () => alert("아이디 또는 비밀번호가 일치하지 않습니다."),
+      },
+    },
+    errorhandling
+  );
+
   const { mutate: loginFunc } = useMutation(
     ({ auth_id, password, admin }) =>
       loginRequest({ auth_id: auth_id, password: password }, admin),
     {
-      onError: async (err) => {
-        const { status } = err.response;
-        console.log(err);
-        // setError(true);
-        if (status === 400) {
-          alert("모든 정보를 입력해 주세요.");
-          // setMessage('모든 정보를 입력해 주세요.');
-        }
-        if (status === 403) {
-          alert("관리자가 아닙니다.");
-          // setMessage('관리자가 아닙니다.');
-        }
-        if (status === 404) {
-          alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-          // setMessage('아이디 또는 비밀번호가 일치하지 않습니다.');
-        }
-      },
+      onError: handleError,
       onSuccess: async (res) => {
         const { access_token, refresh_token } = res.data;
         setLoginToken({

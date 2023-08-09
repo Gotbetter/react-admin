@@ -10,8 +10,8 @@ import { user_columns, user_paddings } from "../../commons/column_type/user";
 import { GREY, PURPLE, YELLOW } from "../../../colors";
 import Profile from "../../commons/Profile";
 import UpdateUserModal from "./UpdateUserModal";
-import { loginState } from "../../../recoil/login/loginState";
-import { useNavigate } from "react-router-dom";
+import { useErrorHandling } from "../../../api/useErrorHandling";
+import { useApiError } from "../../../api/useApiError";
 
 export default function UserPage() {
   const [users, setUsers] = useState([]);
@@ -21,26 +21,16 @@ export default function UserPage() {
   const queryClient = useQueryClient();
   const paddings = user_paddings;
   const columns = user_columns;
-  const setIsLogin = useSetRecoilState(loginState);
-  const navigate = useNavigate();
+
+  const errorhandling = useErrorHandling();
+  const { handleError } = useApiError(undefined, errorhandling);
 
   const fetchUsersQuery = useQuery(["users"], fetchUsers, {
     retry: 1,
+    onError: handleError,
     onSuccess: async (data) => {
       console.log("[UserPage]: fetching users info");
       setUsers([...data]);
-    },
-    onError: async (err) => {
-      const errorType = err.response.data.errors[0].errorType;
-      const { status } = err.response;
-
-      if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
-        alert("권한이 없습니다.");
-        setIsLogin(false);
-        navigate("/notfound");
-      } else {
-        alert("전체 사용자 정보 조회 실패");
-      }
     },
     select: (res) => res.data,
   });
@@ -50,25 +40,7 @@ export default function UserPage() {
     {
       retry: 1,
       staleTime: Infinity,
-      onError: (err) => {
-        const { status } = err.response;
-        const errorType = err.response.data.errors[0].errorType;
-
-        if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
-          alert("권한이 없습니다.");
-          setIsLogin(false);
-          navigate("/notfound");
-        }
-        if (status === 400) {
-          alert("모든 정보를 입력해 주세요.");
-        }
-        if (status === 403) {
-          alert("관리자가 아니거나 본인이 아닙니다.");
-        }
-        if (status === 404) {
-          alert("존재하지 않는 회원입니다.");
-        }
-      },
+      onError: handleError,
       onSuccess: async () => {
         console.log("[UserPage]: delete user");
         queryClient.invalidateQueries(["users"]);

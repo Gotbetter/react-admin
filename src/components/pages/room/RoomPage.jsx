@@ -14,6 +14,7 @@ export default function RoomPage() {
   const paddings = room_paddings;
   const columns = room_columns;
   const navigate = useNavigate();
+
   const errorhandling = useErrorHandling();
   const { handleError } = useApiError(undefined, errorhandling);
 
@@ -21,11 +22,11 @@ export default function RoomPage() {
 
   const fetchRoomsQuery = useQuery(["rooms"], fetchRooms, {
     retry: 1,
+    onError: handleError,
     onSuccess: async (data) => {
       console.log("[RoomPage]: fetching rooms info");
       setRooms([...data]);
     },
-    onError: handleError,
     select: (res) => res.data,
   });
 

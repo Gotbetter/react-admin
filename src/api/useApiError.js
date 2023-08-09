@@ -13,7 +13,11 @@ const handle404 = () => {
 };
 
 const handle403 = () => {
-  alert("권한이 없습니다.");
+  alert("메인 관리자가 아닙니다.");
+};
+
+const handle409 = () => {
+  alert("중복된 정보입니다.");
 };
 
 const handle500 = () => {
@@ -41,6 +45,9 @@ export const useApiError = (handlers, errorhandling) => {
         },
         404: {
           default: handle404,
+        },
+        409: {
+          default: handle409,
         },
         500: {
           default: handle500,
