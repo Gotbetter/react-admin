@@ -4,43 +4,25 @@ import { styled } from "styled-components";
 import { GREY, YELLOW } from "../../../colors";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUser } from "../../../api/user";
-import { loginState } from "../../../recoil/login/loginState";
-import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useErrorHandling } from "../../../api/useErrorHandling";
+import { useApiError } from "../../../api/useApiError";
 
 export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
   const [username, setUsername] = useState("");
   const queryClient = useQueryClient();
-  const setIsLogin = useSetRecoilState(loginState);
-  const navigate = useNavigate();
+
+  const errorhandling = useErrorHandling();
+  const { handleError } = useApiError(undefined, errorhandling);
 
   const { mutate: updateUserInfo } = useMutation(
     ({ userId, username }) => updateUser(userId, { username: username }),
     {
       retry: 1,
+      onError: handleError,
       onSuccess: async () => {
         console.log("[UserPage]: update user info");
         queryClient.invalidateQueries("users");
         handleClickModal({});
-      },
-      onError: (err) => {
-        const errorType = err.response.data.errors[0].errorType;
-        const { status } = err.response;
-
-        if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
-          alert("권한이 없습니다.");
-          setIsLogin(false);
-          navigate("/notfound");
-        }
-        if (status === 400) {
-          alert("모든 정보를 입력해 주세요.");
-        }
-        if (status === 403) {
-          alert("관리자가 아닙니다.");
-        }
-        if (status === 404) {
-          alert("존재하지 않는 회원입니다.");
-        }
       },
     }
   );

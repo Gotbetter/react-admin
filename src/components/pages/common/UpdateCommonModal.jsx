@@ -5,9 +5,8 @@ import { styled } from "styled-components";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCommon, updateCommon } from "../../../api/common";
 import LoadingImg from "../../../assets/loading.png";
-import { useSetRecoilState } from "recoil";
-import { useNavigate } from "react-router-dom";
-import { loginState } from "../../../recoil/login/loginState";
+import { useErrorHandling } from "../../../api/useErrorHandling";
+import { useApiError } from "../../../api/useApiError";
 
 export default function UpdateCommonModal({
   isClicked,
@@ -32,8 +31,9 @@ export default function UpdateCommonModal({
   const [attribute1, setAttribute1] = useState("");
   const [attribute2, setAttribute2] = useState("");
   const queryClient = useQueryClient();
-  const setIsLogin = useSetRecoilState(loginState);
-  const navigate = useNavigate();
+
+  const errorhandling = useErrorHandling();
+  const { handleError } = useApiError(undefined, errorhandling);
 
   const { mutate: updateCommonInfo } = useMutation(
     ({ group_code, code, code_description, attribute1, attribute2 }) =>
@@ -46,6 +46,7 @@ export default function UpdateCommonModal({
       }),
     {
       retry: 1,
+      onError: handleError,
       onSuccess: async () => {
         console.log(
           isRule
@@ -54,22 +55,6 @@ export default function UpdateCommonModal({
         );
         queryClient.invalidateQueries(isRule ? "rules" : "categories");
         handleClickModal({});
-      },
-      onError: (err) => {
-        const errorType = err.response.data.errors[0].errorType;
-        const { status } = err.response;
-
-        if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
-          alert("권한이 없습니다.");
-          setIsLogin(false);
-          navigate("/notfound");
-        }
-        if (status === 400) {
-          alert("모든 정보를 입력해 주세요.");
-        }
-        if (status === 404) {
-          alert("존재하지 않는 회원입니다.");
-        }
       },
     }
   );
@@ -85,6 +70,7 @@ export default function UpdateCommonModal({
       }),
     {
       retry: 1,
+      onError: handleError,
       onSuccess: async () => {
         console.log(
           isRule
@@ -93,22 +79,6 @@ export default function UpdateCommonModal({
         );
         queryClient.invalidateQueries(isRule ? "rules" : "categories");
         handleClickModal({});
-      },
-      onError: (err) => {
-        const errorType = err.response.data.errors[0].errorType;
-        const { status } = err.response;
-
-        if (status === 403 && errorType === "FORBIDDEN_ADMIN") {
-          alert("권한이 없습니다.");
-          setIsLogin(false);
-          navigate("/notfound");
-        }
-        if (status === 400) {
-          alert("모든 정보를 입력해 주세요.");
-        }
-        if (status === 404) {
-          alert("존재하지 않는 회원입니다.");
-        }
       },
     }
   );
