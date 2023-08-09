@@ -8,12 +8,10 @@ import LoginPage from "./pages/login/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../recoil/login/loginState";
-import { userState } from "../recoil/user/userState";
 import RoomDetailPage from "./pages/room/RoomDetailPage";
 
 export default function RoutePage() {
   const isLogin = useRecoilValue(loginState);
-  // const userInfo = useRecoilValue(userState); -> USER일 경우 확인 방법 찾기
 
   return (
     <Routes>
