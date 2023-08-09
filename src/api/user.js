@@ -14,3 +14,5 @@ export const deleteUser = (userId) => client.delete(`users/${userId}`);
 
 export const updateUser = (userId, userInfo) =>
   client.patch(`users/${userId}`, userInfo);
+
+export const reissue = () => client.post("users/reissue");

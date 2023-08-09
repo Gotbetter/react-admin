@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { loginState } from "../../recoil/login/loginState";
 import { loginTokenState } from "../../recoil/login/loginTokenState";
@@ -8,14 +8,12 @@ import { userState } from "../../recoil/user/userState";
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
-  const isLogin = useRecoilValue(loginState);
-  const setLoginToken = useSetRecoilState(loginTokenState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const [loginToken, setLoginToken] = useRecoilState(loginTokenState);
   const setUser = useSetRecoilState(userState);
 
   useEffect(() => {
-    if (isLogin) {
-      navigate("/");
-    } else {
+    if (!isLogin) {
       setLoginToken({
         accessToken: null,
         refreshToken: null,
@@ -28,8 +26,18 @@ export default function NotFoundPage() {
         profile: null,
       });
       navigate("/login");
+    } else {
+      navigate("/");
     }
-  });
+  }, [
+    isLogin,
+    navigate,
+    setLoginToken,
+    setUser,
+    loginToken.accessToken,
+    setIsLogin,
+  ]);
+
   return <NotFoundImg>Not Found Page</NotFoundImg>;
 }
 
