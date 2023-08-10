@@ -3,12 +3,12 @@ import { styled } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../recoil/user/userState";
 
-export default function MenuContent({ title, children }) {
+export default function MenuContent({ title, Middle, children }) {
   const user = useRecoilValue(userState);
 
   return (
     <Layout>
-      <HeaderWrapper>
+      <HeaderWrapper middle={Middle}>
         <Title>{title}</Title>
         <UserWrapper>
           <UserName>{user.username}</UserName>
@@ -19,6 +19,7 @@ export default function MenuContent({ title, children }) {
           </ProfileWrapper>
         </UserWrapper>
       </HeaderWrapper>
+      {Middle && <MiddleWrapper>{Middle}</MiddleWrapper>}
       <BodyWrapper>
         <WhiteBox>{children}</WhiteBox>
       </BodyWrapper>
@@ -36,8 +37,8 @@ const Layout = styled.div`
 
 const HeaderWrapper = styled.div`
   margin-top: 48px;
-  margin-left: 30px;
-  margin-bottom: 42px;
+  margin-left: 35px;
+  margin-bottom: ${(props) => (props.middle ? "10px" : "22px")};
   display: flex;
   justify-content: space-between;
 `;
@@ -52,6 +53,7 @@ const Title = styled.div`
   font-weight: 700;
   line-height: normal;
   letter-spacing: 0.3px;
+  color: #252733;
 `;
 
 const UserWrapper = styled.div`
@@ -72,6 +74,7 @@ const UserName = styled.div`
   font-weight: 600;
   line-height: 20px; /* 142.857% */
   letter-spacing: 0.2px;
+  color: #252733;
 `;
 
 const ProfileWrapper = styled.div`
@@ -112,4 +115,12 @@ const WhiteBox = styled.div`
   background-color: white;
   border-radius: 8px;
   border: 1px solid var(--grayscale-divider, #dfe0eb);
+`;
+
+const MiddleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 250px;
+  margin-left: 30px;
+  margin-bottom: 10px;
 `;
