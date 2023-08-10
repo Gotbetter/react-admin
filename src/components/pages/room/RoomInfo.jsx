@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import { fetchOneRoom } from "../../../api/room";
 import { useQuery } from "@tanstack/react-query";
 import { useErrorHandling } from "../../../api/useErrorHandling";
 import { useApiError } from "../../../api/useApiError";
 import { useLocation } from "react-router-dom";
-import { GREY, YELLOW } from "../../../colors";
+import { GREY, PURPLE, YELLOW } from "../../../colors";
+import UpdateRoomInfoModal from "./UpdateRoomInfoModal";
 
 export default function RoomInfo() {
   const [room, setRoom] = useState(undefined);
   const location = useLocation();
   const pathname = location.pathname;
   const roomId = pathname.split("/")[2];
+
+  const [updateModal, setUpdateModal] = useState(false);
+  const [updateRoomInfo, setUpdateRoomInfo] = useState({});
 
   const [hasError, setHasError] = useState(false);
   const errorhandling = useErrorHandling();
@@ -35,15 +39,28 @@ export default function RoomInfo() {
     }
   );
 
+  const handleClickModal = (room) => {
+    setUpdateRoomInfo(room);
+    setUpdateModal(!updateModal);
+  };
+
   return (
     <InfoWrapper>
       {room && (
         <>
+          {updateModal && (
+            <UpdateRoomInfoModal
+              handleClickModal={handleClickModal}
+              room={updateRoomInfo}
+            />
+          )}
           <TitleWrapper>
             <Title>{room.title}</Title>
             <BtnWrapper>
-              <Btn color={YELLOW}>수정</Btn>
-              <Btn>추가</Btn>
+              <Btn color={YELLOW} onClick={() => handleClickModal(room)}>
+                수정
+              </Btn>
+              <Btn color={PURPLE}>삭제</Btn>
             </BtnWrapper>
           </TitleWrapper>
           <DetailListWrapper>

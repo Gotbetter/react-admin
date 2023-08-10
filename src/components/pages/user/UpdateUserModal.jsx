@@ -30,10 +30,10 @@ export default function UpdateUserModal({ isClicked, handleClickModal, user }) {
   useEffect(() => {
     if (!isClicked) {
       setUsername("");
-    } else {
+    } else if (username === "") {
       setUsername(user.username);
     }
-  }, [isClicked, user.username]);
+  }, [isClicked, user.username, username]);
 
   return (
     <div>

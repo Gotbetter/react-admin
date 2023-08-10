@@ -121,6 +121,6 @@ const MiddleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 250px;
-  margin-left: 30px;
+  margin-left: 35px;
   margin-bottom: 10px;
 `;
