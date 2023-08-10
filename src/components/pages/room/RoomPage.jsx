@@ -20,7 +20,7 @@ export default function RoomPage() {
 
   const [rooms, setRooms] = useState([]);
 
-  const fetchRoomsQuery = useQuery(["rooms"], fetchRooms, {
+  const fetchRoomsQuery = useQuery(["rooms"], () => fetchRooms(true), {
     retry: 1,
     onError: handleError,
     onSuccess: async (data) => {

@@ -1,3 +1,6 @@
 import { client } from "./client";
 
-export const fetchRooms = () => client.get("rooms/admin");
+export const fetchRooms = (admin) => client.get("rooms", { params: { admin } });
+
+export const fetchOneRoom = (roomId, admin) =>
+  client.get(`rooms/${roomId}`, { params: { admin } });

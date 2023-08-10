@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminChangeReuqest, fetchUsers } from "../../../api/user";
 import GraphTemplate from "../../commons/GraphTemplate";
 import { admin_columns, admin_paddings } from "../../commons/column_type/admin";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user/userState";
 import { GREEN, GREY, PURPLE } from "../../../colors";
 import Profile from "../../commons/Profile";
