@@ -231,14 +231,14 @@ const ModalOutside = styled.div`
 
 const WhiteBox = styled.div`
   position: relative;
-  width: 380px;
-  height: 582px;
+  width: 400px;
   background-color: white;
   border-radius: 8px;
   border: 1px solid var(--grayscale-divider, #dfe0eb);
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 25px;
 `;
 
 const ProfileWrapper = styled.div`
@@ -246,7 +246,7 @@ const ProfileWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 80px;
+  margin-top: 50px;
 `;
 
 const ProfileImage = styled.div`
@@ -263,9 +263,9 @@ const ProfileImage = styled.div`
 `;
 
 const CommonInfoWrapper = styled.div`
-  width: 80%;
+  width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   font-size: 15px;
   font-style: normal;
@@ -279,7 +279,7 @@ const ButtonWrapper = styled.div`
   align-items: center;
   display: flex;
   flex-direction: row;
-  margin-top: 12px;
+  margin: 25px;
 `;
 
 const BtnProfile = styled.button`
@@ -317,7 +317,7 @@ const Btn = styled.button`
 `;
 
 const TextInput = styled.textarea`
-  width: 230px;
+  width: 250px;
   height: ${(props) => (props.height ? `${props.height}px` : "39px")};
   padding: 10px;
   fill: #fff;
