@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ContentArea from "../../commons/ContentArea";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user/userState";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteUser, fetchUsers } from "../../../api/user";
