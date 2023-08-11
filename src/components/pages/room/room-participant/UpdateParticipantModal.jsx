@@ -50,7 +50,6 @@ export default function UpdateParticipantModal({
     if (participantInfo === undefined) {
       setParticipantInfo(participant);
     }
-    console.log(participantInfo);
   }, [participant, participantInfo]);
 
   return (
