@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
-import { fetchOneRoom } from "../../../api/room";
-import { useQuery } from "@tanstack/react-query";
+import { deleteRoom, fetchOneRoom } from "../../../api/room";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useErrorHandling } from "../../../api/useErrorHandling";
 import { useApiError } from "../../../api/useApiError";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GREY, PURPLE, YELLOW } from "../../../colors";
 import UpdateRoomInfoModal from "./UpdateRoomInfoModal";
 
 export default function RoomInfo() {
-  const [room, setRoom] = useState(undefined);
   const location = useLocation();
   const pathname = location.pathname;
   const roomId = pathname.split("/")[2];
 
+  const [room, setRoom] = useState(undefined);
   const [updateModal, setUpdateModal] = useState(false);
   const [updateRoomInfo, setUpdateRoomInfo] = useState({});
+
+  const navigate = useNavigate();
 
   const [hasError, setHasError] = useState(false);
   const errorhandling = useErrorHandling();
@@ -31,11 +33,24 @@ export default function RoomInfo() {
         handleError(err);
       },
       onSuccess: async (data) => {
-        console.log("[RoomInfo]: fetching room info");
+        console.log("[RoomInfo]: fetching room detail info");
         setRoom(data);
       },
       select: (res) => res.data,
       enabled: !hasError,
+    }
+  );
+
+  const { mutate: deleteARoom } = useMutation(
+    ({ roomId }) => deleteRoom(roomId),
+    {
+      retry: 1,
+      staleTime: Infinity,
+      onError: handleError,
+      onSuccess: async () => {
+        console.log("[RoomInfo]: delete user");
+        navigate("/rooms");
+      },
     }
   );
 
@@ -60,7 +75,12 @@ export default function RoomInfo() {
               <Btn color={YELLOW} onClick={() => handleClickModal(room)}>
                 수정
               </Btn>
-              <Btn color={PURPLE}>삭제</Btn>
+              <Btn
+                color={PURPLE}
+                onClick={() => deleteARoom({ roomId: room.room_id })}
+              >
+                삭제
+              </Btn>
             </BtnWrapper>
           </TitleWrapper>
           <DetailListWrapper>
