@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   category_columns,
   category_paddings,
-} from "../../commons/column_type/common";
+} from "../../commons/column-type/common";
 import { fetchCategories } from "../../../api/common";
 import { useQuery } from "@tanstack/react-query";
 import Profile from "../../commons/Profile";

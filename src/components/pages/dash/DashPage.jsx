@@ -1,6 +1,6 @@
 import React from "react";
-import ContentArea from "../../commons/ContentArea";
+import Layout from "../../commons/Layout";
 
 export default function DashPage() {
-  return <ContentArea tab={"/"} title={"대시보드 (예정)"}></ContentArea>;
+  return <Layout tab={"/"} title={"대시보드 (예정)"}></Layout>;
 }

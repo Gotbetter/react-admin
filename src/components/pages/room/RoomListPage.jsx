@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ContentArea from "../../commons/ContentArea";
-import { room_columns, room_paddings } from "../../commons/column_type/room";
+import Layout from "../../commons/Layout";
+import { room_columns, room_paddings } from "../../commons/column-type/room";
 import GraphTemplate from "../../commons/GraphTemplate";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRooms } from "../../../api/room";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useApiError } from "../../../api/useApiError";
 import { useErrorHandling } from "../../../api/useErrorHandling";
 
-export default function RoomPage() {
+export default function RoomListPage() {
   const paddings = room_paddings;
   const columns = room_columns;
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function RoomPage() {
   });
 
   return (
-    <ContentArea tab={"/rooms"} title={"방 관리"}>
+    <Layout tab={"/rooms"} title={"방 관리"}>
       <GraphTemplate columns={columns} paddings={paddings}>
         {rooms.map((room) => (
           <List key={room.room_id} grid={columns.length}>
@@ -50,7 +50,7 @@ export default function RoomPage() {
           </List>
         ))}
       </GraphTemplate>
-    </ContentArea>
+    </Layout>
   );
 }
 

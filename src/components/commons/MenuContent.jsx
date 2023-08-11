@@ -7,8 +7,8 @@ export default function MenuContent({ title, Middle, children }) {
   const user = useRecoilValue(userState);
 
   return (
-    <Layout>
-      <HeaderWrapper middle={Middle}>
+    <Wrapper>
+      <HeaderWrapper middle={!!Middle}>
         <Title>{title}</Title>
         <UserWrapper>
           <UserName>{user.username}</UserName>
@@ -23,11 +23,11 @@ export default function MenuContent({ title, Middle, children }) {
       <BodyWrapper>
         <WhiteBox>{children}</WhiteBox>
       </BodyWrapper>
-    </Layout>
+    </Wrapper>
   );
 }
 
-const Layout = styled.div`
+const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #f7f8fc;
@@ -36,7 +36,7 @@ const Layout = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
-  margin-top: 48px;
+  margin-top: 34px;
   margin-left: 35px;
   margin-bottom: ${(props) => (props.middle ? "10px" : "22px")};
   display: flex;
@@ -120,7 +120,7 @@ const WhiteBox = styled.div`
 const MiddleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 250px;
   margin-left: 35px;
   margin-bottom: 10px;
+  margin-right: 35px;
 `;

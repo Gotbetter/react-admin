@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ContentArea from "../../commons/ContentArea";
+import Layout from "../../commons/Layout";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user/userState";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteUser, fetchUsers } from "../../../api/user";
 import GraphTemplate from "../../commons/GraphTemplate";
-import { user_columns, user_paddings } from "../../commons/column_type/user";
+import { user_columns, user_paddings } from "../../commons/column-type/user";
 import { GREY, PURPLE, YELLOW } from "../../../colors";
 import Profile from "../../commons/Profile";
 import UpdateUserModal from "./UpdateUserModal";
@@ -54,7 +54,7 @@ export default function UserPage() {
   };
 
   return (
-    <ContentArea tab={"/users"} title={"회원 관리"}>
+    <Layout tab={"/users"} title={"회원 관리"}>
       <GraphTemplate columns={columns} paddings={paddings}>
         {users.map((user) => (
           <List key={user.user_id} grid={columns.length}>
@@ -97,7 +97,7 @@ export default function UserPage() {
         handleClickModal={handleClickModal}
         user={updateUserInfo}
       />
-    </ContentArea>
+    </Layout>
   );
 }
 // D9D9D9

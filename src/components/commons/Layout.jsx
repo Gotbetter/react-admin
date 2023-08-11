@@ -3,18 +3,18 @@ import { styled } from "styled-components";
 import MenuBar from "./MenuBar";
 import MenuContent from "./MenuContent";
 
-export default function ContentArea({ tab, title, Middle, children }) {
+export default function Layout({ tab, title, Middle, children }) {
   return (
-    <Layout>
+    <Wrapper>
       <MenuBar tab={tab} />
       <MenuContent title={title} Middle={Middle}>
         {children}
       </MenuContent>
-    </Layout>
+    </Wrapper>
   );
 }
 
-const Layout = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
 `;

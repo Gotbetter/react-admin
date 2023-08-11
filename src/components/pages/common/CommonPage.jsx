@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ContentArea from "../../commons/ContentArea";
+import Layout from "../../commons/Layout";
 import {
   category_columns,
   category_paddings,
   rule_columns,
   rule_paddings,
-} from "../../commons/column_type/common";
+} from "../../commons/column-type/common";
 import GraphTemplate from "../../commons/GraphTemplate";
 import UpdateCommonModal from "./UpdateCommonModal";
 import CategoryPage from "./CategoryPage";
@@ -27,7 +27,7 @@ export default function CommonPage() {
   };
 
   return (
-    <ContentArea tab={"/commons"} title={"공통 코드"}>
+    <Layout tab={"/commons"} title={"공통 코드"}>
       <SelectWrapper>
         <Select onChange={(e) => setSelectedOption(e.target.value)}>
           <option value='카테고리'>카테고리</option>
@@ -58,7 +58,7 @@ export default function CommonPage() {
         isNew={isNew}
         common={updateCommonInfo}
       />
-    </ContentArea>
+    </Layout>
   );
 }
 

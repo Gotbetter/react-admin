@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import DashPage from "./pages/dash/DashPage";
-import RoomPage from "./pages/room/RoomPage";
+import RoomListPage from "./pages/room/RoomListPage";
 import UserPage from "./pages/user/UserPage";
 import CommonPage from "./pages/common/CommonPage";
 import AdminPage from "./pages/admin/AdminPage";
@@ -23,7 +23,7 @@ export default function RoutePage() {
       ) : (
         <>
           <Route path='/' exact element={<DashPage />} />
-          <Route path='/rooms' exact element={<RoomPage />} />
+          <Route path='/rooms' exact element={<RoomListPage />} />
           <Route path='/rooms/:roomId' exact element={<RoomDetailPage />} />
           <Route path='/users' exact element={<UserPage />} />
           <Route path='/commons' exact element={<CommonPage />} />
