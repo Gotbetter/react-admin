@@ -1,13 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { GREY, YELLOW } from "../../../colors";
+import { GREY, YELLOW } from "../../../../colors";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useErrorHandling } from "../../../api/useErrorHandling";
-import { useApiError } from "../../../api/useApiError";
-import { updateRoom } from "../../../api/room";
+import { useErrorHandling } from "../../../../api/useErrorHandling";
+import { useApiError } from "../../../../api/useApiError";
+import { updateRoom } from "../../../../api/room";
 import RoomInfoWrapper from "./RoomInfoWrapper";
-import { fetchCategories, fetchRules } from "../../../api/common";
+import { fetchCategories, fetchRules } from "../../../../api/common";
 
 const initRoomInfo = {
   title: "",

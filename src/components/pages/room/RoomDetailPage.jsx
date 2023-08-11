@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import ContentArea from "../../commons/ContentArea";
-import RoomInfo from "./RoomInfo";
+import RoomInfo from "./room-info/RoomInfo";
+import RoomParticipant from "./room-participant/RoomParticipant";
 
 export default function RoomDetailPage() {
   const [selected, setSelected] = useState("");
@@ -42,7 +43,7 @@ export default function RoomDetailPage() {
       }
     >
       {selected === "방 정보" && <RoomInfo />}
-      {selected === "참여자" && <div>참여자</div>}
+      {selected === "참여자" && <RoomParticipant />}
       {selected === "참여 요청자" && <div>참여 요청자</div>}
     </ContentArea>
   );

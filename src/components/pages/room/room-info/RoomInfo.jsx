@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
-import { deleteRoom, fetchOneRoom } from "../../../api/room";
+import { deleteRoom, fetchOneRoom } from "../../../../api/room";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useErrorHandling } from "../../../api/useErrorHandling";
-import { useApiError } from "../../../api/useApiError";
+import { useErrorHandling } from "../../../../api/useErrorHandling";
+import { useApiError } from "../../../../api/useApiError";
 import { useLocation, useNavigate } from "react-router-dom";
-import { GREY, PURPLE, YELLOW } from "../../../colors";
+import { GREY, PURPLE, YELLOW } from "../../../../colors";
 import UpdateRoomInfoModal from "./UpdateRoomInfoModal";
 
 export default function RoomInfo() {
