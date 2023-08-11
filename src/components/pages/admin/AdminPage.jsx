@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ContentArea from "../../commons/ContentArea";
+import Layout from "../../commons/Layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminChangeReuqest, fetchUsers } from "../../../api/user";
 import GraphTemplate from "../../commons/GraphTemplate";
@@ -45,7 +45,7 @@ export default function AdminPage() {
   );
 
   return (
-    <ContentArea tab={"/admins"} title={"관리자"}>
+    <Layout tab={"/admins"} title={"관리자"}>
       <GraphTemplate columns={columns} paddings={paddings}>
         {users.map((user) => (
           <List key={user.user_id} grid={columns.length}>
@@ -88,7 +88,7 @@ export default function AdminPage() {
           </List>
         ))}
       </GraphTemplate>
-    </ContentArea>
+    </Layout>
   );
 }
 

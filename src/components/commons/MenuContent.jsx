@@ -7,7 +7,7 @@ export default function MenuContent({ title, Middle, children }) {
   const user = useRecoilValue(userState);
 
   return (
-    <Layout>
+    <Wrapper>
       <HeaderWrapper middle={Middle}>
         <Title>{title}</Title>
         <UserWrapper>
@@ -23,11 +23,11 @@ export default function MenuContent({ title, Middle, children }) {
       <BodyWrapper>
         <WhiteBox>{children}</WhiteBox>
       </BodyWrapper>
-    </Layout>
+    </Wrapper>
   );
 }
 
-const Layout = styled.div`
+const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #f7f8fc;

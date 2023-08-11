@@ -43,7 +43,7 @@ export default function LoginPage() {
   );
 
   return (
-    <Layout>
+    <Wrapper>
       <WhiteBox>
         <LogoBox>로고</LogoBox>
         <AppName>GotBetter Admin</AppName>
@@ -66,11 +66,11 @@ export default function LoginPage() {
         </LoginButton>
       </WhiteBox>
       {isLogin && <UserData />}
-    </Layout>
+    </Wrapper>
   );
 }
 
-const Layout = styled.div`
+const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

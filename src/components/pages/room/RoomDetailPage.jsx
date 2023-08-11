@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import ContentArea from "../../commons/ContentArea";
+import Layout from "../../commons/Layout";
 import RoomInfo from "./room-info/RoomInfo";
 import RoomParticipant from "./room-participant/RoomParticipant";
 
@@ -14,7 +14,7 @@ export default function RoomDetailPage() {
   }, [selected]);
 
   return (
-    <ContentArea
+    <Layout
       tab={"/rooms"}
       title={"방 관리"}
       Middle={
@@ -45,7 +45,7 @@ export default function RoomDetailPage() {
       {selected === "방 정보" && <RoomInfo />}
       {selected === "참여자" && <RoomParticipant />}
       {selected === "참여 요청자" && <div>참여 요청자</div>}
-    </ContentArea>
+    </Layout>
   );
 }
 

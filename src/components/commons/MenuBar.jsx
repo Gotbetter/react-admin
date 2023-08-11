@@ -16,7 +16,7 @@ export default function MenuBar({ tab }) {
   };
 
   return (
-    <Layout>
+    <Wrapper>
       <AppName>GotBetter Admin</AppName>
       <TabWrapper onClick={() => handleTabClick("/")} selected={tab === "/"}>
         <TabIconWrapper>
@@ -70,10 +70,10 @@ export default function MenuBar({ tab }) {
         <TabName selected={tab === "/continue"}>(예정)</TabName>
       </TabWrapper>
       <UnderLine />
-    </Layout>
+    </Wrapper>
   );
 }
-const Layout = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 350px;

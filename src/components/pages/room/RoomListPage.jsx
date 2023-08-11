@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ContentArea from "../../commons/ContentArea";
+import Layout from "../../commons/Layout";
 import { room_columns, room_paddings } from "../../commons/column-type/room";
 import GraphTemplate from "../../commons/GraphTemplate";
 import { useQuery } from "@tanstack/react-query";
@@ -31,7 +31,7 @@ export default function RoomListPage() {
   });
 
   return (
-    <ContentArea tab={"/rooms"} title={"방 관리"}>
+    <Layout tab={"/rooms"} title={"방 관리"}>
       <GraphTemplate columns={columns} paddings={paddings}>
         {rooms.map((room) => (
           <List key={room.room_id} grid={columns.length}>
@@ -50,7 +50,7 @@ export default function RoomListPage() {
           </List>
         ))}
       </GraphTemplate>
-    </ContentArea>
+    </Layout>
   );
 }
 
