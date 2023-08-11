@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import GraphTemplate from "../../../commons/GraphTemplate";
 import {
   participant_columns,
   participant_paddings,
 } from "../../../commons/column-type/participant";
-import { useQuery } from "@tanstack/react-query";
-import { fetchParticipants } from "../../../../api/participant";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  deleteParticipant,
+  fetchParticipants,
+} from "../../../../api/participant";
 import { useErrorHandling } from "../../../../api/useErrorHandling";
 import { useApiError } from "../../../../api/useApiError";
 import ArrowIcon from "../../../../assets/arrowIcon.svg";
@@ -21,8 +24,18 @@ export default function RoomParticipant({ roomId, handleClickModal }) {
 
   const [participants, setParticipants] = useState([]);
 
+  const queryClient = useQueryClient();
+
   const errorhandling = useErrorHandling();
-  const { handleError } = useApiError(undefined, errorhandling);
+  const { handleError } = useApiError(
+    {
+      403: {
+        FORBIDDEN: () => alert("방장은 강퇴가 블가능합니다."),
+        FORBIDDEN_ADMIN: errorhandling.handleNotAdminError,
+      },
+    },
+    errorhandling
+  );
 
   const fetchParticipantsQuery = useQuery(
     ["participants"],
@@ -35,6 +48,19 @@ export default function RoomParticipant({ roomId, handleClickModal }) {
         setParticipants([...data]);
       },
       select: (res) => res.data,
+    }
+  );
+
+  const { mutate: deleteAParticipant } = useMutation(
+    ({ participantId }) => deleteParticipant(participantId),
+    {
+      retry: 1,
+      staleTime: Infinity,
+      onError: handleError,
+      onSuccess: async () => {
+        console.log("[RoomParticipants]: delete participant");
+        queryClient.invalidateQueries("participants");
+      },
     }
   );
 
@@ -66,7 +92,11 @@ export default function RoomParticipant({ roomId, handleClickModal }) {
           <ParticipantInfo padding={paddings[6]}>
             <Btn
               color={PURPLE}
-              //   onClick={() => deleteAUser({ userId: user.user_id })}
+              onClick={() =>
+                deleteAParticipant({
+                  participantId: participant.participant_id,
+                })
+              }
             >
               강퇴
             </Btn>
