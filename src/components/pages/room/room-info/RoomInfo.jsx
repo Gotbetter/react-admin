@@ -1,41 +1,21 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
-import { deleteRoom, fetchOneRoom } from "../../../../api/room";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { deleteRoom } from "../../../../api/room";
+import { useMutation } from "@tanstack/react-query";
 import { useErrorHandling } from "../../../../api/useErrorHandling";
 import { useApiError } from "../../../../api/useApiError";
 import { useNavigate } from "react-router-dom";
 import { GREY, PURPLE, YELLOW } from "../../../../colors";
 import UpdateRoomInfoModal from "./UpdateRoomInfoModal";
 
-export default function RoomInfo({ roomId }) {
-  const [room, setRoom] = useState(undefined);
+export default function RoomInfo({ room }) {
   const [updateModal, setUpdateModal] = useState(false);
   const [updateRoomInfo, setUpdateRoomInfo] = useState({});
 
   const navigate = useNavigate();
 
-  const [hasError, setHasError] = useState(false);
   const errorhandling = useErrorHandling();
   const { handleError } = useApiError(undefined, errorhandling);
-
-  const fetchRoomsQuery = useQuery(
-    ["oneRoom"],
-    () => fetchOneRoom(roomId, true),
-    {
-      retry: 1,
-      onError: (err) => {
-        setHasError(true);
-        handleError(err);
-      },
-      onSuccess: async (data) => {
-        console.log("[RoomInfo]: fetching room detail info");
-        setRoom(data);
-      },
-      select: (res) => res.data,
-      enabled: !hasError,
-    }
-  );
 
   const { mutate: deleteARoom } = useMutation(
     ({ roomId }) => deleteRoom(roomId),

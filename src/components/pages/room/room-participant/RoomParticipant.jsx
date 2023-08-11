@@ -6,23 +6,18 @@ import {
   participant_paddings,
 } from "../../../commons/column-type/participant";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  deleteParticipant,
-  fetchParticipants,
-} from "../../../../api/participant";
+import { deleteParticipant } from "../../../../api/participant";
 import { useErrorHandling } from "../../../../api/useErrorHandling";
 import { useApiError } from "../../../../api/useApiError";
 import ArrowIcon from "../../../../assets/arrowIcon.svg";
 import { useNavigate } from "react-router-dom";
 import Profile from "../../../commons/Profile";
-import { GREY, PURPLE, YELLOW } from "../../../../colors";
+import { GREY, PURPLE } from "../../../../colors";
 
-export default function RoomParticipant({ roomId, handleClickModal }) {
+export default function RoomParticipant({ participants, handleClickModal }) {
   const paddings = participant_paddings;
   const columns = participant_columns;
   const navigate = useNavigate();
-
-  const [participants, setParticipants] = useState([]);
 
   const queryClient = useQueryClient();
 
@@ -35,20 +30,6 @@ export default function RoomParticipant({ roomId, handleClickModal }) {
       },
     },
     errorhandling
-  );
-
-  const fetchParticipantsQuery = useQuery(
-    ["participants"],
-    () => fetchParticipants(roomId, true, true),
-    {
-      retry: 1,
-      onError: handleError,
-      onSuccess: async (data) => {
-        console.log("[RoomParticipants]: fetching participants");
-        setParticipants([...data]);
-      },
-      select: (res) => res.data,
-    }
   );
 
   const { mutate: deleteAParticipant } = useMutation(
