@@ -12,7 +12,7 @@ import { useApiError } from "../../../../api/useApiError";
 import ArrowIcon from "../../../../assets/arrowIcon.svg";
 import { useNavigate } from "react-router-dom";
 import Profile from "../../../commons/Profile";
-import { PURPLE, YELLOW } from "../../../../colors";
+import { GREY, PURPLE, YELLOW } from "../../../../colors";
 
 export default function RoomParticipant({ roomId, handleClickModal }) {
   const paddings = participant_paddings;
@@ -59,7 +59,7 @@ export default function RoomParticipant({ roomId, handleClickModal }) {
             {participant.updated_date}
           </ParticipantInfo>
           <ParticipantInfo padding={paddings[5]}>
-            <Btn color={YELLOW} onClick={handleClickModal}>
+            <Btn color={GREY} onClick={() => handleClickModal(participant)}>
               수정
             </Btn>
           </ParticipantInfo>

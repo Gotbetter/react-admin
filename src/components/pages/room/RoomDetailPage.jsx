@@ -14,6 +14,7 @@ export default function RoomDetailPage() {
 
   const [selected, setSelected] = useState("");
   const [updateModal, setUpdateModal] = useState(false);
+  const [updateParticipantInfo, setUpdateParticipantInfo] = useState({});
 
   useEffect(() => {
     if (selected === "") {
@@ -21,7 +22,8 @@ export default function RoomDetailPage() {
     }
   }, [selected]);
 
-  const handleClickModal = () => {
+  const handleClickModal = (participant) => {
+    setUpdateParticipantInfo(participant);
     setUpdateModal(!updateModal);
   };
 
@@ -53,7 +55,7 @@ export default function RoomDetailPage() {
               참여 요청자
             </MiddleContent>
           </MiddleWrapper>
-          {(selected === "참여자" || selected === "참여 요청자") && (
+          {selected === "참여 요청자" && (
             <Btn onClick={handleClickModal}>추가</Btn>
           )}
         </>
@@ -66,7 +68,12 @@ export default function RoomDetailPage() {
       {selected === "참여 요청자" && (
         <RoomJoinRequest roomId={roomId} handleClickModal={handleClickModal} />
       )}
-      {updateModal && <UpdateParticipantModal>aa</UpdateParticipantModal>}
+      {updateModal && (
+        <UpdateParticipantModal
+          handleClickModal={handleClickModal}
+          participant={updateParticipantInfo}
+        />
+      )}
     </Layout>
   );
 }

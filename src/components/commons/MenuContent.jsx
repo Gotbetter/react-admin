@@ -8,7 +8,7 @@ export default function MenuContent({ title, Middle, children }) {
 
   return (
     <Wrapper>
-      <HeaderWrapper middle={!!Middle}>
+      <HeaderWrapper middle={Middle}>
         <Title>{title}</Title>
         <UserWrapper>
           <UserName>{user.username}</UserName>
