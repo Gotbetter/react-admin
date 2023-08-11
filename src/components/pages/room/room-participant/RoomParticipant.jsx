@@ -31,7 +31,7 @@ export default function RoomParticipant({ roomId, handleClickModal }) {
       retry: 1,
       onError: handleError,
       onSuccess: async (data) => {
-        console.log("[RoomPage]: fetching rooms info");
+        console.log("[RoomParticipants]: fetching participants");
         setParticipants([...data]);
       },
       select: (res) => res.data,
