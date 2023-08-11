@@ -7,3 +7,5 @@ export const fetchOneRoom = (roomId, admin) =>
 
 export const updateRoom = (roomId, roomInfo) =>
   client.patch(`rooms/${roomId}/admin`, roomInfo);
+
+export const deleteRoom = (roomId) => client.delete(`rooms/${roomId}`);
