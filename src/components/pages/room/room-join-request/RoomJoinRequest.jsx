@@ -1,46 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { styled } from "styled-components";
 import GraphTemplate from "../../../commons/GraphTemplate";
 import {
   join_request_columns,
   join_request_paddings,
 } from "../../../commons/column-type/participant";
-import { useNavigate } from "react-router-dom";
-import { useErrorHandling } from "../../../../api/useErrorHandling";
-import { useApiError } from "../../../../api/useApiError";
-import { fetchParticipants } from "../../../../api/participant";
-import { useQuery } from "@tanstack/react-query";
 import Profile from "../../../commons/Profile";
 import { GREEN, PURPLE } from "../../../../colors";
 
-export default function RoomJoinRequest({ roomId, handleClickModal }) {
+export default function RoomJoinRequest({ joinRequesters }) {
   const paddings = join_request_paddings;
   const columns = join_request_columns;
-  const navigate = useNavigate();
-
-  const [joinRequesters, setJoinRequesters] = useState([]);
-
-  const errorhandling = useErrorHandling();
-  const { handleError } = useApiError(undefined, errorhandling);
-
-  const fetchParticipantsQuery = useQuery(
-    ["joinRequesters"],
-    () => fetchParticipants(roomId, false, true),
-    {
-      retry: 1,
-      onError: handleError,
-      onSuccess: async (data) => {
-        console.log("[RoomJoinRequesters]: fetching joinRequesters");
-        setJoinRequesters([...data]);
-      },
-      select: (res) => res.data,
-    }
-  );
 
   return (
     <GraphTemplate columns={columns} paddings={paddings}>
       {joinRequesters.map((joinRequester) => (
-        <List key={joinRequester.participant_id} grid={columns.length}>
+        <List key={joinRequester.user_id} grid={columns.length}>
           <Profile
             profile={joinRequester.profile}
             username={joinRequester.username}
@@ -49,9 +24,7 @@ export default function RoomJoinRequest({ roomId, handleClickModal }) {
             {joinRequester.created_date}
           </JoinRequestInfo>
           <JoinRequestInfo padding={paddings[2]}>
-            <Btn color={GREEN} onClick={handleClickModal}>
-              승인
-            </Btn>
+            <Btn color={GREEN}>승인</Btn>
           </JoinRequestInfo>
           <JoinRequestInfo padding={paddings[3]}>
             <Btn color={PURPLE}>거절</Btn>

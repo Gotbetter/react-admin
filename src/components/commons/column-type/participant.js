@@ -30,7 +30,7 @@ const participant_columns = [
   },
 ];
 
-const join_request_paddings = [0, 30, 300, 50];
+const join_request_paddings = [0, 30, 200, 50];
 const join_request_columns = [
   {
     id: 0,

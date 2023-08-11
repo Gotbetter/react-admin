@@ -6,6 +6,12 @@ import RoomInfo from "./room-info/RoomInfo";
 import RoomParticipant from "./room-participant/RoomParticipant";
 import UpdateParticipantModal from "./room-participant/UpdateParticipantModal";
 import RoomJoinRequest from "./room-join-request/RoomJoinRequest";
+import AddJoinRequester from "./room-join-request/AddJoinRequester";
+import { useErrorHandling } from "../../../api/useErrorHandling";
+import { useApiError } from "../../../api/useApiError";
+import { useQuery } from "@tanstack/react-query";
+import { fetchParticipants } from "../../../api/participant";
+import { fetchOneRoom } from "../../../api/room";
 
 export default function RoomDetailPage() {
   const location = useLocation();
@@ -14,7 +20,58 @@ export default function RoomDetailPage() {
 
   const [selected, setSelected] = useState("");
   const [updateModal, setUpdateModal] = useState(false);
+  const [addModal, setAddModal] = useState(false);
   const [updateParticipantInfo, setUpdateParticipantInfo] = useState({});
+  const [addRequestersInfo, setAddRequestersInfo] = useState([]);
+
+  const [room, setRoom] = useState(undefined);
+  const [participants, setParticipants] = useState([]);
+  const [joinRequesters, setJoinRequesters] = useState([]);
+
+  const errorhandling = useErrorHandling();
+  const { handleError } = useApiError(undefined, errorhandling);
+
+  const fetchRoomsQuery = useQuery(
+    ["oneRoom"],
+    () => fetchOneRoom(roomId, true),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async (data) => {
+        console.log("[RoomInfo]: fetching room detail info");
+        setRoom(data);
+      },
+      select: (res) => res.data,
+    }
+  );
+
+  const fetchParticipantsQuery = useQuery(
+    ["participants"],
+    () => fetchParticipants(roomId, true, true),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async (data) => {
+        console.log("[RoomParticipants]: fetching participants");
+        setParticipants([...data]);
+      },
+      select: (res) => res.data,
+    }
+  );
+
+  const fetchJoinRequestersQuery = useQuery(
+    ["joinRequesters"],
+    () => fetchParticipants(roomId, false, true),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async (data) => {
+        console.log("[RoomJoinRequesters]: fetching joinRequesters");
+        setJoinRequesters([...data]);
+      },
+      select: (res) => res.data,
+    }
+  );
 
   useEffect(() => {
     if (selected === "") {
@@ -22,9 +79,13 @@ export default function RoomDetailPage() {
     }
   }, [selected]);
 
-  const handleClickModal = (participant) => {
+  const handleUpdateClickModal = (participant) => {
     setUpdateParticipantInfo(participant);
     setUpdateModal(!updateModal);
+  };
+
+  const handleAddClickModal = () => {
+    setAddModal(!addModal);
   };
 
   return (
@@ -56,22 +117,34 @@ export default function RoomDetailPage() {
             </MiddleContent>
           </MiddleWrapper>
           {selected === "참여 요청자" && (
-            <Btn onClick={handleClickModal}>추가</Btn>
+            <Btn onClick={handleAddClickModal}>추가</Btn>
           )}
         </>
       }
     >
-      {selected === "방 정보" && <RoomInfo roomId={roomId} />}
+      {selected === "방 정보" && <RoomInfo room={room} />}
       {selected === "참여자" && (
-        <RoomParticipant roomId={roomId} handleClickModal={handleClickModal} />
+        <RoomParticipant
+          participants={participants}
+          handleClickModal={handleUpdateClickModal}
+        />
       )}
       {selected === "참여 요청자" && (
-        <RoomJoinRequest roomId={roomId} handleClickModal={handleClickModal} />
+        <RoomJoinRequest
+          joinRequesters={joinRequesters}
+          handleClickModal={handleAddClickModal}
+        />
       )}
       {updateModal && (
         <UpdateParticipantModal
-          handleClickModal={handleClickModal}
+          handleClickModal={handleUpdateClickModal}
           participant={updateParticipantInfo}
+        />
+      )}
+      {addModal && (
+        <AddJoinRequester
+          handleClickModal={handleAddClickModal}
+          room_code={room.room_code}
         />
       )}
     </Layout>
