@@ -4,15 +4,11 @@ import { deleteRoom, fetchOneRoom } from "../../../../api/room";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useErrorHandling } from "../../../../api/useErrorHandling";
 import { useApiError } from "../../../../api/useApiError";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GREY, PURPLE, YELLOW } from "../../../../colors";
 import UpdateRoomInfoModal from "./UpdateRoomInfoModal";
 
-export default function RoomInfo() {
-  const location = useLocation();
-  const pathname = location.pathname;
-  const roomId = pathname.split("/")[2];
-
+export default function RoomInfo({ roomId }) {
   const [room, setRoom] = useState(undefined);
   const [updateModal, setUpdateModal] = useState(false);
   const [updateRoomInfo, setUpdateRoomInfo] = useState({});
@@ -94,12 +90,15 @@ export default function RoomInfo() {
             </DetailInfoWrapper>
             <DetailInfoWrapper>
               <DetailInfo>참가비</DetailInfo>
-              <DetailInfo color={GREY}>{room.entry_fee + "원"}</DetailInfo>
+              <DetailInfo color={GREY}>
+                {new Intl.NumberFormat("ko-KR").format(room.entry_fee) + "원"}
+              </DetailInfo>
             </DetailInfoWrapper>
             <DetailInfoWrapper>
               <DetailInfo>전체 참가비</DetailInfo>
               <DetailInfo color={GREY}>
-                {room.total_entry_fee + "원"}
+                {new Intl.NumberFormat("ko-KR").format(room.total_entry_fee) +
+                  "원"}
               </DetailInfo>
             </DetailInfoWrapper>
             <DetailInfoWrapper>

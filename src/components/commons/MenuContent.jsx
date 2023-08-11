@@ -8,7 +8,7 @@ export default function MenuContent({ title, Middle, children }) {
 
   return (
     <Wrapper>
-      <HeaderWrapper middle={Middle}>
+      <HeaderWrapper middle={!!Middle}>
         <Title>{title}</Title>
         <UserWrapper>
           <UserName>{user.username}</UserName>
@@ -36,7 +36,7 @@ const Wrapper = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
-  margin-top: 48px;
+  margin-top: 34px;
   margin-left: 35px;
   margin-bottom: ${(props) => (props.middle ? "10px" : "22px")};
   display: flex;
@@ -120,7 +120,7 @@ const WhiteBox = styled.div`
 const MiddleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 250px;
   margin-left: 35px;
   margin-bottom: 10px;
+  margin-right: 35px;
 `;
