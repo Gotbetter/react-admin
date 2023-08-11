@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ContentArea from "../../commons/ContentArea";
-import { room_columns, room_paddings } from "../../commons/column_type/room";
+import { room_columns, room_paddings } from "../../commons/column-type/room";
 import GraphTemplate from "../../commons/GraphTemplate";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRooms } from "../../../api/room";

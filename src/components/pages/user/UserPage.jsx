@@ -6,7 +6,7 @@ import { userState } from "../../../recoil/user/userState";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteUser, fetchUsers } from "../../../api/user";
 import GraphTemplate from "../../commons/GraphTemplate";
-import { user_columns, user_paddings } from "../../commons/column_type/user";
+import { user_columns, user_paddings } from "../../commons/column-type/user";
 import { GREY, PURPLE, YELLOW } from "../../../colors";
 import Profile from "../../commons/Profile";
 import UpdateUserModal from "./UpdateUserModal";

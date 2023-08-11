@@ -4,7 +4,7 @@ import ContentArea from "../../commons/ContentArea";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminChangeReuqest, fetchUsers } from "../../../api/user";
 import GraphTemplate from "../../commons/GraphTemplate";
-import { admin_columns, admin_paddings } from "../../commons/column_type/admin";
+import { admin_columns, admin_paddings } from "../../commons/column-type/admin";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user/userState";
 import { GREEN, GREY, PURPLE } from "../../../colors";

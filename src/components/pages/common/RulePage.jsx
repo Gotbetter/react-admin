@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { rule_columns, rule_paddings } from "../../commons/column_type/common";
+import { rule_columns, rule_paddings } from "../../commons/column-type/common";
 import { fetchRules } from "../../../api/common";
 import { useQuery } from "@tanstack/react-query";
 import { PURPLE, YELLOW } from "../../../colors";

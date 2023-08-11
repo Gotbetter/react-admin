@@ -6,7 +6,7 @@ import {
   category_paddings,
   rule_columns,
   rule_paddings,
-} from "../../commons/column_type/common";
+} from "../../commons/column-type/common";
 import GraphTemplate from "../../commons/GraphTemplate";
 import UpdateCommonModal from "./UpdateCommonModal";
 import CategoryPage from "./CategoryPage";
