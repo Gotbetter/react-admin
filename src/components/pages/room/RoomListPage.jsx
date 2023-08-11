@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useApiError } from "../../../api/useApiError";
 import { useErrorHandling } from "../../../api/useErrorHandling";
 
-export default function RoomPage() {
+export default function RoomListPage() {
   const paddings = room_paddings;
   const columns = room_columns;
   const navigate = useNavigate();
