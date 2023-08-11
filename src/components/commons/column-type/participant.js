@@ -2,7 +2,7 @@ const participant_paddings = [0, 0, 0, 30, 30, 50, 0];
 const participant_columns = [
   {
     id: 0,
-    title: "회원",
+    title: "참여자",
   },
   {
     id: 1,
@@ -30,4 +30,29 @@ const participant_columns = [
   },
 ];
 
-export { participant_paddings, participant_columns };
+const join_request_paddings = [0, 30, 300, 50];
+const join_request_columns = [
+  {
+    id: 0,
+    title: "참여 요청자",
+  },
+  {
+    id: 1,
+    title: "요청 날짜",
+  },
+  {
+    id: 2,
+    title: "참여 승인",
+  },
+  {
+    id: 3,
+    title: "참여 거절",
+  },
+];
+
+export {
+  participant_paddings,
+  participant_columns,
+  join_request_paddings,
+  join_request_columns,
+};

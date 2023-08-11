@@ -5,6 +5,7 @@ import Layout from "../../commons/Layout";
 import RoomInfo from "./room-info/RoomInfo";
 import RoomParticipant from "./room-participant/RoomParticipant";
 import UpdateParticipantModal from "./room-participant/UpdateParticipantModal";
+import RoomJoinRequest from "./room-join-request/RoomJoinRequest";
 
 export default function RoomDetailPage() {
   const location = useLocation();
@@ -63,9 +64,9 @@ export default function RoomDetailPage() {
         <RoomParticipant roomId={roomId} handleClickModal={handleClickModal} />
       )}
       {selected === "참여 요청자" && (
-        <UpdateParticipantModal>참여 요청자</UpdateParticipantModal>
+        <RoomJoinRequest roomId={roomId} handleClickModal={handleClickModal} />
       )}
-      {updateModal && <div>aa</div>}
+      {updateModal && <UpdateParticipantModal>aa</UpdateParticipantModal>}
     </Layout>
   );
 }
