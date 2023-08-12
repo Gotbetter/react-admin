@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import GraphTemplate from "../../../commons/GraphTemplate";
 import {
@@ -7,10 +7,100 @@ import {
 } from "../../../commons/column-type/participant";
 import Profile from "../../../commons/Profile";
 import { GREEN, PURPLE } from "../../../../colors";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useErrorHandling } from "../../../../api/useErrorHandling";
+import { useApiError } from "../../../../api/useApiError";
+import {
+  approveJoinRequest,
+  rejectJoinRequest,
+} from "../../../../api/participant";
+import { createPlans } from "../../../../api/plan";
 
-export default function RoomJoinRequest({ joinRequesters }) {
+export default function RoomJoinRequest({ joinRequesters, roomId }) {
   const paddings = join_request_paddings;
   const columns = join_request_columns;
+
+  const [participantInfo, setParticipantInfo] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  const errorhandling = useErrorHandling();
+  const { handleError } = useApiError(
+    {
+      409: {
+        CONFLICT_MAX: () => alert("이미 최대 인원입니다."),
+        CONFLICT: () => alert("이미 생성된 계획입니다."),
+      },
+      403: {
+        FORBIDDEN_DATE: () => alert("이미 종료된 방입니다."),
+        FORBIDDEN_ADMIN: errorhandling.handleNotAdminError,
+      },
+    },
+    errorhandling
+  );
+
+  const { mutate: approve } = useMutation(
+    ({ user_id }) =>
+      approveJoinRequest(
+        {
+          user_id: user_id,
+          room_id: roomId,
+        },
+        true
+      ),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async (res) => {
+        console.log("[RoomJoinRequesters]: approve join request");
+        setParticipantInfo(res.data);
+      },
+    }
+  );
+
+  const { mutate: addPlans } = useMutation(
+    ({ participant_id }) =>
+      createPlans({ participant_id: participant_id }, true),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async () => {
+        console.log("[RoomJoinRequesters]: create plans");
+        queryClient.invalidateQueries("joinRequesters");
+      },
+    }
+  );
+
+  const { mutate: reject } = useMutation(
+    ({ user_id }) =>
+      rejectJoinRequest(
+        {
+          user_id,
+          room_id: roomId,
+        },
+        true
+      ),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async () => {
+        console.log("[RoomJoinRequesters]: reject join request");
+        queryClient.invalidateQueries("joinRequesters");
+      },
+    }
+  );
+
+  const handleApproveClick = (userId) => {
+    approve({ user_id: userId });
+  };
+
+  useEffect(() => {
+    if (participantInfo !== null) {
+      // plan 생성
+      addPlans({ participant_id: participantInfo.participant_id });
+      setParticipantInfo(null);
+    }
+  }, [addPlans, participantInfo]);
 
   return (
     <GraphTemplate columns={columns} paddings={paddings}>
@@ -24,10 +114,20 @@ export default function RoomJoinRequest({ joinRequesters }) {
             {joinRequester.created_date}
           </JoinRequestInfo>
           <JoinRequestInfo padding={paddings[2]}>
-            <Btn color={GREEN}>승인</Btn>
+            <Btn
+              color={GREEN}
+              onClick={() => handleApproveClick(joinRequester.user_id)}
+            >
+              승인
+            </Btn>
           </JoinRequestInfo>
           <JoinRequestInfo padding={paddings[3]}>
-            <Btn color={PURPLE}>거절</Btn>
+            <Btn
+              color={PURPLE}
+              onClick={() => reject({ user_id: joinRequester.user_id })}
+            >
+              거절
+            </Btn>
           </JoinRequestInfo>
         </List>
       ))}

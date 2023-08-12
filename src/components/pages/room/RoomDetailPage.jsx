@@ -132,7 +132,7 @@ export default function RoomDetailPage() {
       {selected === "참여 요청자" && (
         <RoomJoinRequest
           joinRequesters={joinRequesters}
-          handleClickModal={handleAddClickModal}
+          roomId={room.room_id}
         />
       )}
       {updateModal && (

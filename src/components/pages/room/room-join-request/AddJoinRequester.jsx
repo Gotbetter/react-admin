@@ -22,6 +22,10 @@ export default function AddJoinRequester({ handleClickModal, room_code }) {
         CONFLICT: () => alert("이미 참여 요청을 보낸 상태입니다."),
         CONFLICT_MAX: () => alert("이미 최대 인원입니다."),
       },
+      403: {
+        FORBIDDEN_DATE: () => alert("이미 종료된 방입니다."),
+        FORBIDDEN_ADMIN: errorhandling.handleNotAdminError,
+      },
     },
     errorhandling
   );

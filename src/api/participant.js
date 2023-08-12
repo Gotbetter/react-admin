@@ -8,3 +8,9 @@ export const deleteParticipant = (participantId) =>
 
 export const joinRoomRequest = (requestInfo) =>
   client.post(`participants/admin`, requestInfo);
+
+export const approveJoinRequest = (requestInfo, admin) =>
+  client.patch("participants", requestInfo, { params: { admin } });
+
+export const rejectJoinRequest = (requestInfo, admin) =>
+  client.post("participants/reject", requestInfo, { params: { admin } });
