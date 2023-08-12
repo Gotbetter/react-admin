@@ -20,9 +20,10 @@ export default function MenuContent({ title, Middle, children }) {
         </UserWrapper>
       </HeaderWrapper>
       {Middle && <MiddleWrapper>{Middle}</MiddleWrapper>}
-      <BodyWrapper>
+      {children}
+      {/* <BodyWrapper>
         <WhiteBox>{children}</WhiteBox>
-      </BodyWrapper>
+      </BodyWrapper> */}
     </Wrapper>
   );
 }
