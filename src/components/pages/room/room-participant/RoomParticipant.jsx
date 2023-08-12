@@ -14,7 +14,11 @@ import { useNavigate } from "react-router-dom";
 import Profile from "../../../commons/Profile";
 import { GREY, PURPLE } from "../../../../colors";
 
-export default function RoomParticipant({ participants, handleClickModal }) {
+export default function RoomParticipant({
+  participants,
+  handleClickModal,
+  handleParticipantClick,
+}) {
   const paddings = participant_paddings;
   const columns = participant_columns;
   const navigate = useNavigate();
@@ -83,7 +87,7 @@ export default function RoomParticipant({ participants, handleClickModal }) {
             </Btn>
             <ArrowButton
               src={ArrowIcon}
-              onClick={() => navigate(`/rooms/${participant.room_id}`)}
+              onClick={() => handleParticipantClick(participant.participant_id)}
             />
           </ParticipantInfo>
         </List>

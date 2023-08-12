@@ -12,6 +12,7 @@ import { useApiError } from "../../../api/useApiError";
 import { useQuery } from "@tanstack/react-query";
 import { fetchParticipants } from "../../../api/participant";
 import { fetchOneRoom } from "../../../api/room";
+import PlanList from "./plan/PlanList";
 
 export default function RoomDetailPage() {
   const location = useLocation();
@@ -22,7 +23,9 @@ export default function RoomDetailPage() {
   const [updateModal, setUpdateModal] = useState(false);
   const [addModal, setAddModal] = useState(false);
   const [updateParticipantInfo, setUpdateParticipantInfo] = useState({});
-  const [addRequestersInfo, setAddRequestersInfo] = useState([]);
+
+  const [participantId, setParticipantId] = useState(0);
+  const [participantClicked, setParticipantClicked] = useState(false);
 
   const [room, setRoom] = useState(undefined);
   const [participants, setParticipants] = useState([]);
@@ -88,6 +91,11 @@ export default function RoomDetailPage() {
     setAddModal(!addModal);
   };
 
+  const handleParticipantClick = (participant_id) => {
+    setParticipantId(participant_id);
+    setParticipantClicked(!participantClicked);
+  };
+
   return (
     <Layout
       tab={"/rooms"}
@@ -123,10 +131,17 @@ export default function RoomDetailPage() {
       }
     >
       {selected === "방 정보" && <RoomInfo room={room} />}
-      {selected === "참여자" && (
+      {selected === "참여자" && participantClicked && (
+        <PlanList
+          handleParticipantClick={handleParticipantClick}
+          participant_id={participantId}
+        ></PlanList>
+      )}
+      {selected === "참여자" && !participantClicked && (
         <RoomParticipant
           participants={participants}
           handleClickModal={handleUpdateClickModal}
+          handleParticipantClick={handleParticipantClick}
         />
       )}
       {selected === "참여 요청자" && (
