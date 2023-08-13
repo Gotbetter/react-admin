@@ -54,6 +54,8 @@ export default function AddPlanDislikeModal({
         console.log("[PlanDislikeList]: create plan dislike");
         if (data.data.rejected) {
           queryClient.invalidateQueries(queryKey);
+        } else {
+          queryClient.invalidateQueries("planDislikes");
         }
         handleClickModal();
       },
