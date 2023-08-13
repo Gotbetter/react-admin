@@ -1,11 +1,11 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { useErrorHandling } from "../../../../api/useErrorHandling";
 import { useApiError } from "../../../../api/useApiError";
-import { PURPLE, YELLOW } from "../../../../colors";
+import { PURPLE } from "../../../../colors";
 import Profile from "../../../commons/Profile";
-import { fetchPlanDislikes } from "../../../../api/plan";
+import { deletePlanDislike, fetchPlanDislikes } from "../../../../api/plan";
 import {
   plan_dislike_columns,
   plan_dislike_paddings,
@@ -36,7 +36,18 @@ export default function PlanDislikeList({ planId }) {
     }
   );
 
-  //onClick={() => handleClickModal(user)} onClick={() => deleteAUser({ userId: user.user_id })}
+  const { mutate: deleteAPlanDislike } = useMutation(
+    ({ participantId }) => deletePlanDislike(planId, participantId),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async () => {
+        console.log("[PlanDislikeList]: delete plan dislike");
+        queryClient.invalidateQueries("planDislikes");
+      },
+    }
+  );
+
   return (
     <>
       {planDislikeList.map((planDislike) => (
@@ -49,7 +60,16 @@ export default function PlanDislikeList({ planId }) {
             {planDislike.created_date}
           </PlanDislikeInfo>
           <PlanDislikeInfo padding={paddings[2]}>
-            <Btn color={PURPLE}>{"삭제"}</Btn>
+            <Btn
+              color={PURPLE}
+              onClick={() =>
+                deleteAPlanDislike({
+                  participantId: planDislike.participant_id,
+                })
+              }
+            >
+              {"삭제"}
+            </Btn>
           </PlanDislikeInfo>
         </List>
       ))}
