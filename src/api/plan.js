@@ -8,3 +8,9 @@ export const fetchPlans = (participantId) =>
 
 export const fetchPlanDislikes = (planId) =>
   client.get(`plans/${planId}/dislike/admin`);
+
+export const createPlanDislike = (planId, userInfo) =>
+  client.post(`plans/${planId}/dislike/admin`, userInfo);
+
+export const fetchNotDislikes = (planId) =>
+  client.get(`plans/${planId}/dislike/members`);
