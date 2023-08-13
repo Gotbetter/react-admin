@@ -11,7 +11,7 @@ import {
   dislike_columns,
   dislike_paddings,
 } from "../../../commons/column-type/dislike";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import DetailPlanList from "./DetailPlanList";
 import { fetchPlans } from "../../../../api/plan";
 import { useErrorHandling } from "../../../../api/useErrorHandling";
@@ -20,15 +20,7 @@ import PlanInfoModal from "./PlanInfoModal";
 import PlanDislikeList from "./PlanDislikeList";
 import AddDetailPlanModal from "./AddDetailPlanModal";
 import AddPlanDislikeModal from "./AddPlanDislikeModal";
-import {
-  detail_record_columns,
-  detail_record_paddings,
-} from "../../../commons/column-type/detailRecord";
-import DetailRecordList from "./detail/DetailRecordList";
-import AddRecordModal from "./detail/AddRecordModal";
-import AddDetailDislikeModal from "./detail/AddDetailDislikeModal";
-import DetailDislikeList from "./detail/DetailDislikeList";
-import DetailInfoModal from "./detail/DetailInfoModal";
+import DetailRecordFrame from "./detail/DetailRecordFrame";
 
 export default function PlanList({ handleParticipantClick, participant_id }) {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -36,11 +28,8 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
 
   // modal
   const [planInfoModal, setPlanInfoModal] = useState(false);
-  const [detailInfoModal, setDetailInfoModal] = useState(false);
   const [addDetailModal, setAddDetailModal] = useState(false);
   const [addPlanDislikeModal, setAddPlanDislikeModal] = useState(false);
-  const [addRecordModal, setAddRecordModal] = useState(false);
-  const [addDetailDislikeModal, setAddDetailDislikeModal] = useState(false);
 
   // click detail plan
   const [detailPlan, setDetailPlan] = useState(null);
@@ -67,25 +56,12 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
   const handlePlanInfoModal = () => {
     setPlanInfoModal(!planInfoModal);
   };
-
-  const handleDetailInfoModal = () => {
-    setDetailInfoModal(!detailInfoModal);
-  };
-
   const handleAddDetailModal = () => {
     setAddDetailModal(!addDetailModal);
   };
 
   const handleAddPlanDislikeModal = () => {
     setAddPlanDislikeModal(!addPlanDislikeModal);
-  };
-
-  const handleAddRecordModal = () => {
-    setAddRecordModal(!addRecordModal);
-  };
-
-  const handleAddRecordDislikeModal = () => {
-    setAddDetailDislikeModal(!addDetailDislikeModal);
   };
 
   // handle click detail plan
@@ -153,7 +129,7 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
               <DetailPlanList
                 planId={selectedOption.plan_id}
                 handleClickDetailPlan={handleClickDetailPlan}
-              ></DetailPlanList>
+              />
             )}
           </GraphTemplate>
           <MiddleTitle>
@@ -184,60 +160,11 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
           )}
         </>
       ) : (
-        <>
-          <ArrowWrapper>
-            <IconButton
-              src={ArrowLeftIcon}
-              onClick={() => handleClickDetailPlan({})}
-            />
-            <ContentText>{detailPlan.content}</ContentText>
-            {/**세부 계획 완료 버튼 만들기 */}
-            <IconButton src={InfoIcon} onClick={handleDetailInfoModal} />
-            {detailInfoModal && (
-              <DetailInfoModal
-                handleClickInfoModal={handleDetailInfoModal}
-                detailPlanInfo={detailPlan}
-              />
-            )}
-            <AddModalButton onClick={handleAddRecordModal}>
-              세부 계획 인증 추가
-            </AddModalButton>
-          </ArrowWrapper>
-          <GraphTemplate
-            columns={detail_record_columns}
-            paddings={detail_record_paddings}
-          >
-            {detailPlan !== null && (
-              <DetailRecordList
-                planId={selectedOption.plan_id}
-                detailPlanId={detailPlan.detail_plan_id}
-              />
-            )}
-          </GraphTemplate>
-          <MiddleTitle>
-            세부 계획에 대해 싫어요 누른 멤버
-            <AddModalButton onClick={handleAddRecordDislikeModal}>
-              싫어요 누를 멤버 추가
-            </AddModalButton>
-          </MiddleTitle>
-          <GraphTemplate columns={dislike_columns} paddings={dislike_paddings}>
-            {detailPlan !== null && (
-              <DetailDislikeList detailPlanId={detailPlan.detail_plan_id} />
-            )}
-          </GraphTemplate>
-          {addRecordModal && (
-            <AddRecordModal
-              handleClickAddModal={handleAddRecordModal}
-              detailPlanId={detailPlan.detail_plan_id}
-            />
-          )}
-          {addDetailDislikeModal && (
-            <AddDetailDislikeModal
-              handleClickModal={handleAddRecordDislikeModal}
-              detailPlanId={detailPlan.detail_plan_id}
-            />
-          )}
-        </>
+        <DetailRecordFrame
+          planId={selectedOption.plan_id}
+          detailPlanId={detailPlan.detail_plan_id}
+          handleClickDetailPlan={handleClickDetailPlan}
+        ></DetailRecordFrame>
       )}
     </>
   );
