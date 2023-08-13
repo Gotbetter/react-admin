@@ -18,11 +18,13 @@ import { useErrorHandling } from "../../../../api/useErrorHandling";
 import { useApiError } from "../../../../api/useApiError";
 import PlanInfoModal from "./PlanInfoModal";
 import PlanDislikeList from "./PlanDislikeList";
+import AddDetailPlanModal from "./AddDetailPlanModal";
 
 export default function PlanList({ handleParticipantClick, participant_id }) {
   const [selectedOption, setSelectedOption] = useState(null);
   const [planList, setPlanList] = useState(null);
   const [clickInfoModal, setClickInfoModal] = useState(false);
+  const [clickAddModal, setClickAddModal] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -42,6 +44,10 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
       select: (res) => res.data,
     }
   );
+
+  const handleClickAddModal = () => {
+    setClickAddModal(!clickAddModal);
+  };
 
   const handleClickInfoModal = () => {
     setClickInfoModal(!clickInfoModal);
@@ -89,7 +95,9 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
             planInfo={selectedOption}
           />
         )}
-        상세 계획 추가
+        <AddModalButton onClick={handleClickAddModal}>
+          상세 계획 추가
+        </AddModalButton>
       </ArrowWrapper>
       <GraphTemplate columns={detail_columns} paddings={detail_paddings}>
         {selectedOption !== null && (
@@ -105,6 +113,12 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
           <PlanDislikeList planId={selectedOption.plan_id}></PlanDislikeList>
         )}
       </GraphTemplate>
+      {clickAddModal && (
+        <AddDetailPlanModal
+          handleClickAddModal={handleClickAddModal}
+          planId={selectedOption.plan_id}
+        />
+      )}
     </>
   );
 }
@@ -155,4 +169,14 @@ const Select = styled.select`
   border: 1px solid #dfe0eb;
   border-radius: 5px;
   color: #333;
+`;
+
+const AddModalButton = styled.div`
+  cursor: pointer;
+  transition: color 0.3s; /* 변화를 부드럽게 만들기 위한 트랜지션 설정 */
+
+  &:hover {
+    /* font-weight: bold; */
+    color: #3751ff; /* 마우스를 올렸을 때의 배경 색상 */
+  }
 `;
