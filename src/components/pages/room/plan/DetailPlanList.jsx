@@ -67,7 +67,7 @@ export default function DetailPlanList({ planId, handleClickDetailPlan }) {
             {detailPlan.complete ? "완료" : "미완료"}
           </DetailPlanInfo>
           <DetailPlanInfo padding={paddings[2]}>
-            {detailPlan.rejected ? "불가능" : "가능"}
+            {detailPlan.complete && !detailPlan.rejected ? "가능" : "불가능"}
           </DetailPlanInfo>
           <DetailPlanInfo padding={paddings[3]}>
             {detailPlan.created_date}

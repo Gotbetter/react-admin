@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchNotDetailDislikes } from "../../../../../api/detailPlanRecord";
+import {
+  createDetailDislike,
+  fetchNotDetailDislikes,
+} from "../../../../../api/detailPlanRecord";
 import { useErrorHandling } from "../../../../../api/useErrorHandling";
 import { useApiError } from "../../../../../api/useApiError";
 import { GREY, BLUE } from "../../../../../colors";
@@ -44,22 +47,18 @@ export default function AddDetailDislikeModal({
     }
   );
 
-  //   const { mutate: newPlanDislike } = useMutation(
-  //     ({ user_id }) => createPlanDislike(planId, { user_id }),
-  //     {
-  //       retry: 1,
-  //       onError: handleError,
-  //       onSuccess: async (data) => {
-  //         console.log("[PlanDislikeList]: create plan dislike");
-  //         if (data.data.rejected) {
-  //           queryClient.invalidateQueries(queryKey);
-  //         } else {
-  //           queryClient.invalidateQueries("planDislikes");
-  //         }
-  //         handleClickModal();
-  //       },
-  //     }
-  //   );
+  const { mutate: newDetailDislike } = useMutation(
+    ({ user_id }) => createDetailDislike(detailPlanId, { user_id }),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async (data) => {
+        console.log("[DetailDislikeList]: create detail dislike");
+        queryClient.invalidateQueries("detailDislikes");
+        handleClickModal();
+      },
+    }
+  );
 
   const handleOptionChange = (e) => {
     const userId = parseInt(e.target.value);
@@ -106,7 +105,10 @@ export default function AddDetailDislikeModal({
           </Btn>
           <Btn
             color={BLUE}
-            // onClick={() => newPlanDislike({ user_id: selectedUserId })}
+            onClick={() =>
+              selectedUserId !== 0 &&
+              newDetailDislike({ user_id: selectedUserId })
+            }
           >
             추가
           </Btn>
