@@ -98,7 +98,10 @@ export default function AddJoinRequester({ handleClickModal, room_code }) {
           </Btn>
           <Btn
             color={BLUE}
-            onClick={() => createJoinRequester({ user_id: selectedUserId })}
+            onClick={() =>
+              selectedUserId !== 0 &&
+              createJoinRequester({ user_id: selectedUserId })
+            }
           >
             추가
           </Btn>

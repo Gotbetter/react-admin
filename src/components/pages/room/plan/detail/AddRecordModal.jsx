@@ -13,7 +13,15 @@ export default function AddRecordModal({ handleClickAddModal, detailPlanId }) {
   const queryClient = useQueryClient();
 
   const errorhandling = useErrorHandling();
-  const { handleError } = useApiError(undefined, errorhandling);
+  const { handleError } = useApiError(
+    {
+      403: {
+        FORBIDDEN: () => alert("계획이 완료되어 추가 인증이 불가능합니다."),
+        FORBIDDEN_ADMIN: errorhandling.handleNotAdminError,
+      },
+    },
+    errorhandling
+  );
 
   const { mutate: newRecord } = useMutation(
     ({ title, body }) =>

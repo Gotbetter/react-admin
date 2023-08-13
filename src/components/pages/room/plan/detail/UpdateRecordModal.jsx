@@ -17,7 +17,15 @@ export default function UpdateRecordModal({
   const queryClient = useQueryClient();
 
   const errorhandling = useErrorHandling();
-  const { handleError } = useApiError(undefined, errorhandling);
+  const { handleError } = useApiError(
+    {
+      403: {
+        FORBIDDEN: () => alert("계획이 완료되어 수정이 불가능합니다."),
+        FORBIDDEN_ADMIN: errorhandling.handleNotAdminError,
+      },
+    },
+    errorhandling
+  );
 
   const { mutate: modifyDetailRecord } = useMutation(
     ({ title, body }) =>

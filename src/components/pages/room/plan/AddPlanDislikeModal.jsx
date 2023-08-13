@@ -107,7 +107,10 @@ export default function AddPlanDislikeModal({
           </Btn>
           <Btn
             color={BLUE}
-            onClick={() => newPlanDislike({ user_id: selectedUserId })}
+            onClick={() =>
+              selectedUserId !== 0 &&
+              newPlanDislike({ user_id: selectedUserId })
+            }
           >
             추가
           </Btn>

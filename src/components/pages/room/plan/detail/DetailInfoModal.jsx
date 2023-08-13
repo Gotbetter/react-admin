@@ -21,7 +21,7 @@ export default function DetailInfoModal({
           세부 계획 완료 여부
           <TextInput
             type='text'
-            defaultValue={detailPlanInfo.completed ? "완료" : "미완료"}
+            defaultValue={detailPlanInfo.complete ? "완료" : "미완료"}
             readOnly={true}
           />
         </DetailInfoWrapper>
@@ -29,7 +29,11 @@ export default function DetailInfoModal({
           평가 가능 여부
           <TextInput
             type='text'
-            defaultValue={detailPlanInfo.rejected ? "불가능" : "가능"}
+            defaultValue={
+              detailPlanInfo.complete && !detailPlanInfo.rejected
+                ? "가능"
+                : "불가능"
+            }
             readOnly={true}
           />
         </DetailInfoWrapper>
