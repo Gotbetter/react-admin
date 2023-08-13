@@ -10,3 +10,8 @@ export const updateDetailPlan = (planId, detailPlanId, content, admin) =>
   client.patch(`plans/${planId}/details/${detailPlanId}`, content, {
     params: { admin },
   });
+
+export const deleteDetailPlan = (planId, detailPlanId, admin) =>
+  client.delete(`plans/${planId}/details/${detailPlanId}`, {
+    params: { admin },
+  });
