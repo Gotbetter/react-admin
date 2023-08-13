@@ -1,36 +1,59 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { useErrorHandling } from "../../../../../api/useErrorHandling";
 import { useApiError } from "../../../../../api/useApiError";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { GREY, BLUE } from "../../../../../colors";
-import { createDetailRecord } from "../../../../../api/detailPlanRecord";
+import { GREY, YELLOW } from "../../../../../colors";
+import { updateDetailRecord } from "../../../../../api/detailPlanRecord";
 
-export default function AddRecordModal({ handleClickAddModal, detailPlanId }) {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+export default function UpdateRecordModal({
+  handleClickModal,
+  detailPlanId,
+  record,
+}) {
+  const [title, setTitle] = useState(null);
+  const [body, setBody] = useState(null);
 
   const queryClient = useQueryClient();
 
   const errorhandling = useErrorHandling();
   const { handleError } = useApiError(undefined, errorhandling);
 
-  const { mutate: newRecord } = useMutation(
+  const { mutate: modifyDetailRecord } = useMutation(
     ({ title, body }) =>
-      createDetailRecord(detailPlanId, {
-        record_title: title,
-        record_body: body,
-      }),
+      updateDetailRecord(
+        detailPlanId,
+        record.record_id,
+        { record_title: title, record_body: body },
+        true
+      ),
     {
       retry: 1,
       onError: handleError,
       onSuccess: async () => {
-        console.log("[DetailRecordList]: create detail record");
+        console.log("[DetailRecordList]: update detail record");
         queryClient.invalidateQueries("detailPlanRecords");
-        handleClickAddModal();
+        handleClickModal({});
       },
     }
   );
+
+  const checkUpdate = () => {
+    if (title === record.record_title && body === record.record_body) {
+      handleClickModal({});
+    } else {
+      modifyDetailRecord({ title, body });
+    }
+  };
+
+  useEffect(() => {
+    if (title === null) {
+      setTitle(record.record_title);
+    }
+    if (body === null) {
+      setBody(record.record_body);
+    }
+  }, [body, record.record_body, title, record.record_title]);
 
   return (
     <ModalOutside>
@@ -39,7 +62,7 @@ export default function AddRecordModal({ handleClickAddModal, detailPlanId }) {
           인증 제목
           <TextInput
             type='text'
-            placeholder={"인증 제목을 작성해주세요."}
+            defaultValue={record.record_title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </RecordInfoWrapper>
@@ -47,16 +70,16 @@ export default function AddRecordModal({ handleClickAddModal, detailPlanId }) {
           인증 내용
           <TextInput
             type='text'
-            placeholder={"인증 내용을 작성해주세요."}
+            defaultValue={record.record_body}
             onChange={(e) => setBody(e.target.value)}
           />
         </RecordInfoWrapper>
         <ButtonWrapper>
-          <Btn color={GREY} onClick={handleClickAddModal}>
+          <Btn color={GREY} onClick={() => handleClickModal({})}>
             취소
           </Btn>
-          <Btn color={BLUE} onClick={() => newRecord({ title, body })}>
-            추가
+          <Btn color={YELLOW} onClick={checkUpdate}>
+            수정
           </Btn>
         </ButtonWrapper>
       </WhiteBox>
