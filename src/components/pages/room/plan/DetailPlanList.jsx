@@ -10,11 +10,14 @@ import {
 } from "../../../commons/column-type/detail";
 import { PURPLE, YELLOW } from "../../../../colors";
 import ArrowIcon from "../../../../assets/arrowIcon.svg";
+import UpdateDetailPlanModal from "./UpdateDetailPlanModal";
 
 export default function DetailPlanList({ planId }) {
   const paddings = detail_paddings;
   const columns = detail_columns;
 
+  const [detailPlan, setDetailPlan] = useState({});
+  const [clickUpdateModal, setClickUpdateModal] = useState(false);
   const [detailPlanList, setDetailPlanList] = useState([]);
 
   const queryClient = useQueryClient();
@@ -35,6 +38,11 @@ export default function DetailPlanList({ planId }) {
       select: (res) => res.data,
     }
   );
+
+  const handleClickUpdateModal = (detailPlan) => {
+    setDetailPlan(detailPlan);
+    setClickUpdateModal(!clickUpdateModal);
+  };
   //onClick={() => handleClickModal(user)} onClick={() => deleteAUser({ userId: user.user_id })}
   return (
     <>
@@ -56,7 +64,12 @@ export default function DetailPlanList({ planId }) {
             {detailPlan.updated_date}
           </DetailPlanInfo>
           <DetailPlanInfo padding={paddings[5]}>
-            <Btn color={YELLOW}>{"수정"}</Btn>
+            <Btn
+              color={YELLOW}
+              onClick={() => handleClickUpdateModal(detailPlan)}
+            >
+              {"수정"}
+            </Btn>
           </DetailPlanInfo>
           <DetailPlanInfo padding={paddings[6]}>
             <Btn color={PURPLE}>{"삭제"}</Btn>
@@ -64,6 +77,13 @@ export default function DetailPlanList({ planId }) {
           </DetailPlanInfo>
         </List>
       ))}
+      {clickUpdateModal && (
+        <UpdateDetailPlanModal
+          handleClickModal={handleClickUpdateModal}
+          planId={planId}
+          detailPlan={detailPlan}
+        />
+      )}
     </>
   );
 }
