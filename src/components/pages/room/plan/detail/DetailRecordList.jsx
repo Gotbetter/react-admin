@@ -8,7 +8,10 @@ import {
 import { useErrorHandling } from "../../../../../api/useErrorHandling";
 import { useApiError } from "../../../../../api/useApiError";
 import { PURPLE, YELLOW } from "../../../../../colors";
-import { fetchDetailPlanRecords } from "../../../../../api/detailPlanRecord";
+import {
+  deleteDetailPlanRecord,
+  fetchDetailPlanRecords,
+} from "../../../../../api/detailPlanRecord";
 import UpdateRecordModal from "./UpdateRecordModal";
 
 export default function DetailRecordList({ planId, detailPlanId }) {
@@ -38,17 +41,17 @@ export default function DetailRecordList({ planId, detailPlanId }) {
     }
   );
 
-  //   const { mutate: deleteADetailPlan } = useMutation(
-  //     ({ detailPlanId }) => deleteDetailPlan(planId, detailPlanId, true),
-  //     {
-  //       retry: 1,
-  //       onError: handleError,
-  //       onSuccess: async () => {
-  //         console.log("[DetailPlanList]: delete detail plan");
-  //         queryClient.invalidateQueries("detailPlans");
-  //       },
-  //     }
-  //   );
+  const { mutate: deleteRecord } = useMutation(
+    ({ recordId }) => deleteDetailPlanRecord(detailPlanId, recordId, true),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async () => {
+        console.log("[DetailRecordList]: delete detail record");
+        queryClient.invalidateQueries("detailPlanRecords");
+      },
+    }
+  );
 
   const handleClickUpdateModal = (record) => {
     setDetailPlanRecord(record);
@@ -79,9 +82,7 @@ export default function DetailRecordList({ planId, detailPlanId }) {
           <DetailPlanRecordInfo padding={paddings[5]}>
             <Btn
               color={PURPLE}
-              //   onClick={() =>
-              //     deleteADetailPlan({ detailPlanId: detailPlan.detail_plan_id })
-              //   }
+              onClick={() => deleteRecord({ recordId: record.record_id })}
             >
               {"삭제"}
             </Btn>
