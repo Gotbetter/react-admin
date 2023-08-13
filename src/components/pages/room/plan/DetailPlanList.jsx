@@ -12,7 +12,7 @@ import { PURPLE, YELLOW } from "../../../../colors";
 import ArrowIcon from "../../../../assets/arrowIcon.svg";
 import UpdateDetailPlanModal from "./UpdateDetailPlanModal";
 
-export default function DetailPlanList({ planId }) {
+export default function DetailPlanList({ planId, handleClickDetailPlan }) {
   const paddings = detail_paddings;
   const columns = detail_columns;
 
@@ -92,7 +92,10 @@ export default function DetailPlanList({ planId }) {
             >
               {"삭제"}
             </Btn>
-            <ArrowButton src={ArrowIcon} />
+            <ArrowButton
+              src={ArrowIcon}
+              onClick={() => handleClickDetailPlan(detailPlan)}
+            />
           </DetailPlanInfo>
         </List>
       ))}

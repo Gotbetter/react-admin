@@ -1,76 +1,76 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { useErrorHandling } from "../../../../api/useErrorHandling";
-import { useApiError } from "../../../../api/useApiError";
-import { PURPLE } from "../../../../colors";
-import Profile from "../../../commons/Profile";
-import { deletePlanDislike, fetchPlanDislikes } from "../../../../api/plan";
+import { fetchDetailDislikes } from "../../../../../api/detailPlanRecord";
 import {
   dislike_columns,
   dislike_paddings,
-} from "../../../commons/column-type/dislike";
+} from "../../../../commons/column-type/dislike";
+import { useErrorHandling } from "../../../../../api/useErrorHandling";
+import { useApiError } from "../../../../../api/useApiError";
+import Profile from "../../../../commons/Profile";
+import { PURPLE } from "../../../../../colors";
 
-export default function PlanDislikeList({ planId }) {
+export default function DetailDislikeList({ detailPlanId }) {
   const paddings = dislike_paddings;
   const columns = dislike_columns;
 
-  const [planDislikeList, setPlanDislikeList] = useState([]);
+  const [detailDislikeList, setDetailDislikeList] = useState([]);
 
   const queryClient = useQueryClient();
 
   const errorhandling = useErrorHandling();
   const { handleError } = useApiError(undefined, errorhandling);
 
-  const fetchPlanDislikesQuery = useQuery(
-    ["planDislikes", planId],
-    () => fetchPlanDislikes(planId),
+  const fetchDetailDislikesQuery = useQuery(
+    ["detailDislikes", detailPlanId],
+    () => fetchDetailDislikes(detailPlanId),
     {
       retry: 1,
       onError: handleError,
       onSuccess: async (data) => {
-        console.log("[PlanDislikeList]: fetching plan dislike list info");
-        setPlanDislikeList([...data]);
+        console.log("[DetailDislikeList]: fetching detail dislike list info");
+        setDetailDislikeList([...data]);
       },
       select: (res) => res.data,
     }
   );
 
-  const { mutate: deleteAPlanDislike } = useMutation(
-    ({ participantId }) => deletePlanDislike(planId, participantId),
-    {
-      retry: 1,
-      onError: handleError,
-      onSuccess: async () => {
-        console.log("[PlanDislikeList]: delete plan dislike");
-        queryClient.invalidateQueries("planDislikes");
-      },
-    }
-  );
+  //   const { mutate: deleteAPlanDislike } = useMutation(
+  //     ({ participantId }) => deletePlanDislike(planId, participantId),
+  //     {
+  //       retry: 1,
+  //       onError: handleError,
+  //       onSuccess: async () => {
+  //         console.log("[PlanDislikeList]: delete plan dislike");
+  //         queryClient.invalidateQueries("planDislikes");
+  //       },
+  //     }
+  //   );
 
   return (
     <>
-      {planDislikeList.map((planDislike) => (
-        <List key={planDislike.user_id} grid={columns.length}>
+      {detailDislikeList.map((detailDislike) => (
+        <List key={detailDislike.user_id} grid={columns.length}>
           <Profile
-            profile={planDislike.profile}
-            username={planDislike.username}
+            profile={detailDislike.profile}
+            username={detailDislike.username}
           />
-          <PlanDislikeInfo padding={paddings[1]}>
-            {planDislike.created_date}
-          </PlanDislikeInfo>
-          <PlanDislikeInfo padding={paddings[2]}>
+          <DetailDislikeInfo padding={paddings[1]}>
+            {detailDislike.created_date}
+          </DetailDislikeInfo>
+          <DetailDislikeInfo padding={paddings[2]}>
             <Btn
               color={PURPLE}
-              onClick={() =>
-                deleteAPlanDislike({
-                  participantId: planDislike.participant_id,
-                })
-              }
+              //   onClick={() =>
+              //     deleteAPlanDislike({
+              //       participantId: detailDislike.participant_id,
+              //     })
+              //   }
             >
               {"삭제"}
             </Btn>
-          </PlanDislikeInfo>
+          </DetailDislikeInfo>
         </List>
       ))}
     </>
@@ -88,7 +88,7 @@ const List = styled.li`
       : "repeat(auto-fit, minmax(25%, 1fr));"}; /* 자동으로 요소들 배치 */
 `;
 
-const PlanDislikeInfo = styled.div`
+const DetailDislikeInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
