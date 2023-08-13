@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { useQueryClient } from "react-query";
 import { useErrorHandling } from "../../../../api/useErrorHandling";
 import { useApiError } from "../../../../api/useApiError";
 import { GREY, YELLOW } from "../../../../colors";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function UpdateParticipantModal({
   handleClickModal,
@@ -11,7 +11,7 @@ export default function UpdateParticipantModal({
 }) {
   const [participantInfo, setParticipantInfo] = useState(undefined);
 
-  //   const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const errorhandling = useErrorHandling();
   const { handleError } = useApiError(undefined, errorhandling);

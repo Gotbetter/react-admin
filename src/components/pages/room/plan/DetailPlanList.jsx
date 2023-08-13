@@ -1,9 +1,9 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { useErrorHandling } from "../../../../api/useErrorHandling";
 import { useApiError } from "../../../../api/useApiError";
-import { fetchDetailPlans } from "../../../../api/detailPlan";
+import { deleteDetailPlan, fetchDetailPlans } from "../../../../api/detailPlan";
 import {
   detail_columns,
   detail_paddings,
@@ -39,11 +39,23 @@ export default function DetailPlanList({ planId }) {
     }
   );
 
+  const { mutate: deleteADetailPlan } = useMutation(
+    ({ detailPlanId }) => deleteDetailPlan(planId, detailPlanId, true),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async () => {
+        console.log("[DetailPlanList]: delete detail plan");
+        queryClient.invalidateQueries("detailPlans");
+      },
+    }
+  );
+
   const handleClickUpdateModal = (detailPlan) => {
     setDetailPlan(detailPlan);
     setClickUpdateModal(!clickUpdateModal);
   };
-  //onClick={() => handleClickModal(user)} onClick={() => deleteAUser({ userId: user.user_id })}
+
   return (
     <>
       {detailPlanList.map((detailPlan) => (
@@ -72,7 +84,14 @@ export default function DetailPlanList({ planId }) {
             </Btn>
           </DetailPlanInfo>
           <DetailPlanInfo padding={paddings[6]}>
-            <Btn color={PURPLE}>{"삭제"}</Btn>
+            <Btn
+              color={PURPLE}
+              onClick={() =>
+                deleteADetailPlan({ detailPlanId: detailPlan.detail_plan_id })
+              }
+            >
+              {"삭제"}
+            </Btn>
             <ArrowButton src={ArrowIcon} />
           </DetailPlanInfo>
         </List>
