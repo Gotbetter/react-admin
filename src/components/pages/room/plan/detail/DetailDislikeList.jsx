@@ -1,7 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { fetchDetailDislikes } from "../../../../../api/detailPlanRecord";
+import {
+  deleteDetailDislike,
+  fetchDetailDislikes,
+} from "../../../../../api/detailPlanRecord";
 import {
   dislike_columns,
   dislike_paddings,
@@ -36,17 +39,17 @@ export default function DetailDislikeList({ detailPlanId }) {
     }
   );
 
-  //   const { mutate: deleteAPlanDislike } = useMutation(
-  //     ({ participantId }) => deletePlanDislike(planId, participantId),
-  //     {
-  //       retry: 1,
-  //       onError: handleError,
-  //       onSuccess: async () => {
-  //         console.log("[PlanDislikeList]: delete plan dislike");
-  //         queryClient.invalidateQueries("planDislikes");
-  //       },
-  //     }
-  //   );
+  const { mutate: deleteADetailDislike } = useMutation(
+    ({ participantId }) => deleteDetailDislike(detailPlanId, participantId),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async () => {
+        console.log("[DetailDislikeList]: delete detail dislike");
+        queryClient.invalidateQueries("detailDislikes");
+      },
+    }
+  );
 
   return (
     <>
@@ -62,11 +65,11 @@ export default function DetailDislikeList({ detailPlanId }) {
           <DetailDislikeInfo padding={paddings[2]}>
             <Btn
               color={PURPLE}
-              //   onClick={() =>
-              //     deleteAPlanDislike({
-              //       participantId: detailDislike.participant_id,
-              //     })
-              //   }
+              onClick={() =>
+                deleteADetailDislike({
+                  participantId: detailDislike.participant_id,
+                })
+              }
             >
               {"삭제"}
             </Btn>

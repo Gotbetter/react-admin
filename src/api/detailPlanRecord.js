@@ -22,3 +22,6 @@ export const fetchNotDetailDislikes = (detailPlanId) =>
 
 export const createDetailDislike = (detailPlanId, userInfo) =>
   client.post(`details/${detailPlanId}/dislike/admin`, userInfo);
+
+export const deleteDetailDislike = (detailPlanId, particiapantId) =>
+  client.delete(`details/${detailPlanId}/dislike/${particiapantId}`);
