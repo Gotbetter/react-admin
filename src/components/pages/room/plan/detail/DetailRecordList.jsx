@@ -9,6 +9,7 @@ import { useErrorHandling } from "../../../../../api/useErrorHandling";
 import { useApiError } from "../../../../../api/useApiError";
 import { PURPLE, YELLOW } from "../../../../../colors";
 import { fetchDetailPlanRecords } from "../../../../../api/detailPlanRecord";
+import UpdateRecordModal from "./UpdateRecordModal";
 
 export default function DetailRecordList({ planId, detailPlanId }) {
   const paddings = detail_record_paddings;
@@ -49,8 +50,8 @@ export default function DetailRecordList({ planId, detailPlanId }) {
   //     }
   //   );
 
-  const handleClickUpdateModal = (detailPlanRecord) => {
-    setDetailPlanRecord(detailPlanRecord);
+  const handleClickUpdateModal = (record) => {
+    setDetailPlanRecord(record);
     setClickUpdateModal(!clickUpdateModal);
   };
 
@@ -65,16 +66,13 @@ export default function DetailRecordList({ planId, detailPlanId }) {
             {record.record_body}
           </DetailPlanRecordInfo>
           <DetailPlanRecordInfo padding={paddings[2]}>
-            {record.created_date}
+            {record.create_date}
           </DetailPlanRecordInfo>
           <DetailPlanRecordInfo padding={paddings[3]}>
-            {record.updated_date}
+            {record.last_update_date}
           </DetailPlanRecordInfo>
           <DetailPlanRecordInfo padding={paddings[4]}>
-            <Btn
-              color={YELLOW}
-              //   onClick={() => handleClickUpdateModal(detailPlan)}
-            >
+            <Btn color={YELLOW} onClick={() => handleClickUpdateModal(record)}>
               {"수정"}
             </Btn>
           </DetailPlanRecordInfo>
@@ -90,13 +88,13 @@ export default function DetailRecordList({ planId, detailPlanId }) {
           </DetailPlanRecordInfo>
         </List>
       ))}
-      {/* {clickUpdateModal && (
-        <UpdateDetailPlanModal
+      {clickUpdateModal && (
+        <UpdateRecordModal
           handleClickModal={handleClickUpdateModal}
-          planId={planId}
-          detailPlan={detailPlan}
+          detailPlanId={detailPlanId}
+          record={detailPlanRecord}
         />
-      )} */}
+      )}
     </>
   );
 }
