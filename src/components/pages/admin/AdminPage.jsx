@@ -20,7 +20,15 @@ export default function AdminPage() {
   const columns = admin_columns;
 
   const errorhandling = useErrorHandling();
-  const { handleError } = useApiError(undefined, errorhandling);
+  const { handleError } = useApiError(
+    {
+      403: {
+        FORBIDDEN: () => alert("메인 관리자가 아닙니다."),
+        FORBIDDEN_ADMIN: errorhandling.handleNotAdminError,
+      },
+    },
+    errorhandling
+  );
 
   const fetchUsersQuery = useQuery(["usersforAdmin"], fetchUsers, {
     retry: 1,

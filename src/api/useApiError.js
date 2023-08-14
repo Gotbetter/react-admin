@@ -13,7 +13,7 @@ const handle404 = () => {
 };
 
 const handle403 = () => {
-  alert("메인 관리자가 아닙니다.");
+  alert("권한이 없습니다.");
 };
 
 const handle409 = () => {

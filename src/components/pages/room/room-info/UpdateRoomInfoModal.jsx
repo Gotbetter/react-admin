@@ -8,22 +8,26 @@ import { useApiError } from "../../../../api/useApiError";
 import { updateRoom } from "../../../../api/room";
 import RoomInfoWrapper from "./RoomInfoWrapper";
 import { fetchCategories, fetchRules } from "../../../../api/common";
+import { fetchUsers } from "../../../../api/user";
+import { fetchParticipants } from "../../../../api/participant";
 
 const initRoomInfo = {
   title: "",
-  room_code: "",
+  // room_code: "",
   account: "",
-  entry_fee: "",
+  // entry_fee: "",
   max_user_num: "",
-  week: "",
+  // week: "",
   room_category_code: "",
   rule_code: "",
+  leader_id: "",
 };
 
 export default function UpdateRoomInfoModal({ handleClickModal, room }) {
   const [roomInfo, setRoomInfo] = useState(initRoomInfo);
   const [categories, setCategories] = useState([]);
   const [rules, setRules] = useState([]);
+  const [participants, setParticipants] = useState([]);
 
   const queryClient = useQueryClient();
 
@@ -35,17 +39,7 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
     if (roomInfo.title !== room.title) {
       changable = true;
     }
-    if (roomInfo.room_code !== room.room_code) {
-      changable = true;
-    }
     if (roomInfo.account !== room.account) {
-      changable = true;
-    }
-    if (roomInfo.entry_fee !== room.entry_fee) {
-      if (roomInfo.entry_fee < 0) {
-        alert("참가비 확인해주세요.");
-        return;
-      }
       changable = true;
     }
     if (roomInfo.max_user_num !== room.max_user_num) {
@@ -58,17 +52,13 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
       }
       changable = true;
     }
-    if (roomInfo.week !== room.week) {
-      if (roomInfo.week < 1 || roomInfo.week < room.current_week) {
-        alert("전체 주차 확인해주세요.");
-        return;
-      }
-      changable = true;
-    }
     if (roomInfo.room_category_code !== room.room_category_code) {
       changable = true;
     }
     if (roomInfo.rule_code !== room.rule_code) {
+      changable = true;
+    }
+    if (roomInfo.leader_id !== room.leader_id) {
       changable = true;
     }
     if (changable) {
@@ -76,6 +66,23 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
     } else {
       handleClickModal({});
     }
+    // if (roomInfo.room_code !== room.room_code) {
+    //   changable = true;
+    // }
+    // if (roomInfo.entry_fee !== room.entry_fee) {
+    //   if (roomInfo.entry_fee < 0) {
+    //     alert("참가비 확인해주세요.");
+    //     return;
+    //   }
+    //   changable = true;
+    // }
+    // if (roomInfo.week !== room.week) {
+    //   if (roomInfo.week < 1 || roomInfo.week < room.current_week) {
+    //     alert("전체 주차 확인해주세요.");
+    //     return;
+    //   }
+    //   changable = true;
+    // }
   };
 
   const { mutate: updateRoomInfo } = useMutation(
@@ -119,6 +126,20 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
     }
   );
 
+  const fetchParticipantsQuery = useQuery(
+    ["participantList"],
+    () => fetchParticipants(room.room_id, true, true),
+    {
+      retry: 1,
+      onError: handleError,
+      onSuccess: async (data) => {
+        console.log("[participantList]: fetching participants info");
+        setParticipants([...data]);
+      },
+      select: (res) => res.data,
+    }
+  );
+
   useEffect(() => {
     const keys = Object.keys(initRoomInfo);
     if (keys.every((key) => roomInfo[key] === "")) {
@@ -138,9 +159,9 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
         />
         <RoomInfoWrapper
           name='방 코드'
-          propKey='room_code'
           value={roomInfo.room_code}
-          setValue={setRoomInfo}
+          // propKey='room_code'
+          // setValue={setRoomInfo}
         />
         <RoomInfoWrapper
           name='계좌번호'
@@ -151,9 +172,9 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
         <RoomInfoWrapper
           isNum={true}
           name='참가비'
-          propKey='entry_fee'
           value={roomInfo.entry_fee}
-          setValue={setRoomInfo}
+          // propKey='entry_fee'
+          // setValue={setRoomInfo}
         />
         <RoomInfoWrapper name='전체 참가비' value={room.total_entry_fee} />
         <RoomInfoWrapper name='현재 인원' value={room.current_user_num} />
@@ -168,9 +189,9 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
         <RoomInfoWrapper
           isNum={true}
           name='전체 주차'
-          propKey='week'
           value={roomInfo.week}
-          setValue={setRoomInfo}
+          // propKey='week'
+          // setValue={setRoomInfo}
         />
         <RoomInfoWrapper name='시작 날짜' value={room.start_date} />
         <RoomInfoWrapper
@@ -187,7 +208,13 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
           setValue={setRoomInfo}
           ruleList={rules}
         />
-        <RoomInfoWrapper name='방장' value={room.leader} />
+        <RoomInfoWrapper
+          name='방장'
+          propKey='user_id'
+          setValue={setRoomInfo}
+          value={room.leader_id}
+          userList={participants}
+        />
         <ButtonWrapper>
           <Btn color={GREY} onClick={() => handleClickModal({})}>
             취소
