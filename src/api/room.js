@@ -1,5 +1,7 @@
 import { client } from "./client";
 
+export const createRoom = (roomInfo) => client.post("rooms/admin", roomInfo);
+
 export const fetchRooms = (admin) => client.get("rooms", { params: { admin } });
 
 export const fetchOneRoom = (roomId, admin) =>

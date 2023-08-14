@@ -9,6 +9,7 @@ export default function RoomInfoWrapper({
   setValue,
   categoryList,
   ruleList,
+  userList,
 }) {
   const handleOptionChange = (e) => {
     setValue((prevRoomInfo) => ({
@@ -38,7 +39,16 @@ export default function RoomInfoWrapper({
           ))}
         </Select>
       )}
-      {name !== "카테고리" && name !== "규칙" && (
+      {name === "방장" && (
+        <Select defaultValue={value} onChange={handleOptionChange}>
+          {userList.map((user) => (
+            <option key={user.user_id} value={user.user_id}>
+              {user.username}
+            </option>
+          ))}
+        </Select>
+      )}
+      {name !== "카테고리" && name !== "규칙" && name !== "방장" && (
         <TextInput
           type={isNum ? "number" : "text"}
           defaultValue={value}

@@ -111,7 +111,7 @@ export default function RoomInfo({ room }) {
             </DetailInfoWrapper>
             <DetailInfoWrapper>
               <DetailInfo>방장</DetailInfo>
-              <DetailInfo color={GREY}>{room.leader}</DetailInfo>
+              <DetailInfo color={GREY}>{room.leader_username}</DetailInfo>
             </DetailInfoWrapper>
           </DetailListWrapper>
         </>

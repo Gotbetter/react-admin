@@ -9,16 +9,18 @@ import ArrowIcon from "../../../assets/arrowIcon.svg";
 import { useNavigate } from "react-router-dom";
 import { useApiError } from "../../../api/useApiError";
 import { useErrorHandling } from "../../../api/useErrorHandling";
+import AddRoomModal from "./AddRoomModal";
 
 export default function RoomListPage() {
   const paddings = room_paddings;
   const columns = room_columns;
   const navigate = useNavigate();
 
+  const [rooms, setRooms] = useState([]);
+  const [newRoom, setNewRoom] = useState(false);
+
   const errorhandling = useErrorHandling();
   const { handleError } = useApiError(undefined, errorhandling);
-
-  const [rooms, setRooms] = useState([]);
 
   const fetchRoomsQuery = useQuery(["rooms"], () => fetchRooms(true), {
     retry: 1,
@@ -30,27 +32,42 @@ export default function RoomListPage() {
     select: (res) => res.data,
   });
 
+  const handleNewRoom = () => {
+    setNewRoom(!newRoom);
+  };
+
   return (
-    <Layout tab={"/rooms"} title={"방 관리"}>
-      <GraphTemplate columns={columns} paddings={paddings}>
-        {rooms.map((room) => (
-          <List key={room.room_id} grid={columns.length}>
-            <RoomInfo padding={paddings[0]}>{room.title}</RoomInfo>
-            <RoomInfo padding={paddings[1]}>{room.leader}</RoomInfo>
-            <RoomInfo padding={paddings[2]}>{room.room_category}</RoomInfo>
-            <RoomInfo padding={paddings[3]}>{room.rule}</RoomInfo>
-            <RoomInfo padding={paddings[4]}>{room.start_date}</RoomInfo>
-            <RoomInfo padding={paddings[5]}>
-              {room.end_date}
-              <ArrowButton
-                src={ArrowIcon}
-                onClick={() => navigate(`/rooms/${room.room_id}`)}
-              />
-            </RoomInfo>
-          </List>
-        ))}
-      </GraphTemplate>
-    </Layout>
+    <>
+      <Layout
+        tab={"/rooms"}
+        title={"방 관리"}
+        Middle={
+          <AddModalButton onClick={handleNewRoom}>
+            {"+ 방 만들기"}
+          </AddModalButton>
+        }
+      >
+        <GraphTemplate columns={columns} paddings={paddings}>
+          {rooms.map((room) => (
+            <List key={room.room_id} grid={columns.length}>
+              <RoomInfo padding={paddings[0]}>{room.title}</RoomInfo>
+              <RoomInfo padding={paddings[1]}>{room.leader}</RoomInfo>
+              <RoomInfo padding={paddings[2]}>{room.room_category}</RoomInfo>
+              <RoomInfo padding={paddings[3]}>{room.rule}</RoomInfo>
+              <RoomInfo padding={paddings[4]}>{room.start_date}</RoomInfo>
+              <RoomInfo padding={paddings[5]}>
+                {room.end_date}
+                <ArrowButton
+                  src={ArrowIcon}
+                  onClick={() => navigate(`/rooms/${room.room_id}`)}
+                />
+              </RoomInfo>
+            </List>
+          ))}
+        </GraphTemplate>
+        {newRoom && <AddRoomModal handleClickModal={handleNewRoom} />}
+      </Layout>
+    </>
   );
 }
 
@@ -83,4 +100,22 @@ const ArrowButton = styled.img`
   width: 16px;
   height: 16px;
   cursor: pointer;
+`;
+
+const AddModalButton = styled.div`
+  align-items: center;
+  /* margin-left: 35px; */
+  font-size: 17px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: normal;
+  letter-spacing: 0.3px;
+  color: #252733;
+  cursor: pointer;
+  transition: color 0.3s; /* 변화를 부드럽게 만들기 위한 트랜지션 설정 */
+
+  &:hover {
+    /* font-weight: bold; */
+    color: #3751ff; /* 마우스를 올렸을 때의 배경 색상 */
+  }
 `;
