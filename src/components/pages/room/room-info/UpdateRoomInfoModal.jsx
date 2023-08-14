@@ -8,7 +8,6 @@ import { useApiError } from "../../../../api/useApiError";
 import { updateRoom } from "../../../../api/room";
 import RoomInfoWrapper from "./RoomInfoWrapper";
 import { fetchCategories, fetchRules } from "../../../../api/common";
-import { fetchUsers } from "../../../../api/user";
 import { fetchParticipants } from "../../../../api/participant";
 
 const initRoomInfo = {
@@ -179,7 +178,6 @@ export default function UpdateRoomInfoModal({ handleClickModal, room }) {
         <RoomInfoWrapper name='전체 참가비' value={room.total_entry_fee} />
         <RoomInfoWrapper name='현재 인원' value={room.current_user_num} />
         <RoomInfoWrapper
-          isNum={true}
           name='최대 인원'
           propKey='max_user_num'
           value={roomInfo.max_user_num}
