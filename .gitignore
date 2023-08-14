@@ -22,6 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/src/assets/fonts/*
+/src/assets/fonts/Mulish-E*
+/src/assets/fonts/Mulish-L*
 
+/src/assets/fonts/Mulish-M*
 /src/assets/loading.png

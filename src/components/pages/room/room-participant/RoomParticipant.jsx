@@ -87,7 +87,10 @@ export default function RoomParticipant({
             </Btn>
             <ArrowButton
               src={ArrowIcon}
-              onClick={() => handleParticipantClick(participant.participant_id)}
+              onClick={() =>
+                participant.participant_id &&
+                handleParticipantClick(participant.participant_id)
+              }
             />
           </ParticipantInfo>
         </List>

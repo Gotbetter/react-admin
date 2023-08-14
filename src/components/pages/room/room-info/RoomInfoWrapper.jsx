@@ -48,14 +48,26 @@ export default function RoomInfoWrapper({
           ))}
         </Select>
       )}
-      {name !== "카테고리" && name !== "규칙" && name !== "방장" && (
-        <TextInput
-          type={isNum ? "number" : "text"}
-          defaultValue={value}
-          onChange={handleOptionChange}
-          readOnly={!propKey}
-        />
+      {name === "최대 인원" && (
+        <Select defaultValue={value} onChange={handleOptionChange}>
+          {[1, 2, 3, 4, 5, 6].map((number) => (
+            <option key={number} value={number}>
+              {number}
+            </option>
+          ))}
+        </Select>
       )}
+      {name !== "카테고리" &&
+        name !== "규칙" &&
+        name !== "방장" &&
+        name !== "최대 인원" && (
+          <TextInput
+            type={isNum ? "number" : "text"}
+            defaultValue={value}
+            onChange={handleOptionChange}
+            readOnly={!propKey}
+          />
+        )}
     </Wrapper>
   );
 }

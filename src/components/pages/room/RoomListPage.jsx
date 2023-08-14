@@ -51,7 +51,7 @@ export default function RoomListPage() {
           {rooms.map((room) => (
             <List key={room.room_id} grid={columns.length}>
               <RoomInfo padding={paddings[0]}>{room.title}</RoomInfo>
-              <RoomInfo padding={paddings[1]}>{room.leader}</RoomInfo>
+              <RoomInfo padding={paddings[1]}>{room.leader_username}</RoomInfo>
               <RoomInfo padding={paddings[2]}>{room.room_category}</RoomInfo>
               <RoomInfo padding={paddings[3]}>{room.rule}</RoomInfo>
               <RoomInfo padding={paddings[4]}>{room.start_date}</RoomInfo>

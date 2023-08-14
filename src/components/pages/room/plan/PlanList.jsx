@@ -77,7 +77,7 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
   };
 
   useEffect(() => {
-    if (planList !== null) {
+    if (planList !== null && planList.length !== 0) {
       if (selectedOption === null) {
         setSelectedOption(planList[0]);
       }
@@ -93,12 +93,20 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
               src={ArrowLeftIcon}
               onClick={() => handleParticipantClick(0)}
             />
-            {selectedOption !== null && (
-              <Select
-                value={selectedOption.plan_id}
-                onChange={handleChangeSelect}
-              >
-                {planList.map((plan) => (
+            <Select
+              value={
+                selectedOption !== null && selectedOption.plan_id
+                  ? selectedOption.plan_id
+                  : 0
+              }
+              onChange={handleChangeSelect}
+            >
+              <option value={0} disabled>
+                계획이 존재하지 않습니다.
+              </option>
+              {selectedOption !== null &&
+                selectedOption.plan_id &&
+                planList.map((plan) => (
                   <option key={plan.plan_id} value={plan.plan_id}>
                     {plan.week +
                       "주차 " +
@@ -109,8 +117,7 @@ export default function PlanList({ handleParticipantClick, participant_id }) {
                       ")"}
                   </option>
                 ))}
-              </Select>
-            )}
+            </Select>
             <IconButton src={InfoIcon} onClick={handlePlanInfoModal} />
             {planInfoModal && (
               <PlanInfoModal
