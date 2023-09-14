@@ -11,6 +11,7 @@ import {
 import { PURPLE, YELLOW } from "../../../../colors";
 import ArrowIcon from "../../../../assets/arrowIcon.svg";
 import UpdateDetailPlanModal from "./UpdateDetailPlanModal";
+import DeleteModal from "../../../commons/DeleteModal";
 
 export default function DetailPlanList({ planId, handleClickDetailPlan }) {
   const paddings = detail_paddings;
@@ -19,6 +20,8 @@ export default function DetailPlanList({ planId, handleClickDetailPlan }) {
   const [detailPlan, setDetailPlan] = useState({});
   const [clickUpdateModal, setClickUpdateModal] = useState(false);
   const [detailPlanList, setDetailPlanList] = useState([]);
+  const [clickDeleteModal, setClickDeleteModal] = useState(false);
+  const [deleteDetailPlanInfo, setDeleteDetailPlanInfo] = useState({});
 
   const queryClient = useQueryClient();
 
@@ -51,9 +54,14 @@ export default function DetailPlanList({ planId, handleClickDetailPlan }) {
     }
   );
 
-  const handleClickUpdateModal = (detailPlan) => {
+  const handleUpdateModal = (detailPlan) => {
     setDetailPlan(detailPlan);
     setClickUpdateModal(!clickUpdateModal);
+  };
+
+  const handleDeleteModal = (info) => {
+    setDeleteDetailPlanInfo(info);
+    setClickDeleteModal(!clickDeleteModal);
   };
 
   return (
@@ -76,10 +84,7 @@ export default function DetailPlanList({ planId, handleClickDetailPlan }) {
             {detailPlan.updated_date}
           </DetailPlanInfo>
           <DetailPlanInfo padding={paddings[5]}>
-            <Btn
-              color={YELLOW}
-              onClick={() => handleClickUpdateModal(detailPlan)}
-            >
+            <Btn color={YELLOW} onClick={() => handleUpdateModal(detailPlan)}>
               {"수정"}
             </Btn>
           </DetailPlanInfo>
@@ -87,7 +92,7 @@ export default function DetailPlanList({ planId, handleClickDetailPlan }) {
             <Btn
               color={PURPLE}
               onClick={() =>
-                deleteADetailPlan({ detailPlanId: detailPlan.detail_plan_id })
+                handleDeleteModal({ detailPlanId: detailPlan.detail_plan_id })
               }
             >
               {"삭제"}
@@ -101,9 +106,16 @@ export default function DetailPlanList({ planId, handleClickDetailPlan }) {
       ))}
       {clickUpdateModal && (
         <UpdateDetailPlanModal
-          handleClickModal={handleClickUpdateModal}
+          handleClickModal={handleUpdateModal}
           planId={planId}
           detailPlan={detailPlan}
+        />
+      )}
+      {clickDeleteModal && (
+        <DeleteModal
+          handleClickModal={handleDeleteModal}
+          deleteFunc={deleteADetailPlan}
+          deleteInfo={deleteDetailPlanInfo}
         />
       )}
     </>

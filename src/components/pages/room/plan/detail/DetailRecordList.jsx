@@ -13,6 +13,7 @@ import {
   fetchDetailPlanRecords,
 } from "../../../../../api/detailPlanRecord";
 import UpdateRecordModal from "./UpdateRecordModal";
+import DeleteModal from "../../../../commons/DeleteModal";
 
 export default function DetailRecordList({ planId, detailPlanId }) {
   const paddings = detail_record_paddings;
@@ -21,6 +22,8 @@ export default function DetailRecordList({ planId, detailPlanId }) {
   const [detailPlanRecord, setDetailPlanRecord] = useState({});
   const [clickUpdateModal, setClickUpdateModal] = useState(false);
   const [detailPlanRecordList, setDetailPlanRecordList] = useState([]);
+  const [clickDeleteModal, setClickDeleteModal] = useState(false);
+  const [deleteRecordInfo, setDeleteRecordInfo] = useState({});
 
   const queryClient = useQueryClient();
 
@@ -66,6 +69,11 @@ export default function DetailRecordList({ planId, detailPlanId }) {
     setClickUpdateModal(!clickUpdateModal);
   };
 
+  const handleClickDeleteModal = (info) => {
+    setDeleteRecordInfo(info);
+    setClickDeleteModal(!clickDeleteModal);
+  };
+
   return (
     <>
       {detailPlanRecordList.map((record) => (
@@ -90,7 +98,9 @@ export default function DetailRecordList({ planId, detailPlanId }) {
           <DetailPlanRecordInfo padding={paddings[5]}>
             <Btn
               color={PURPLE}
-              onClick={() => deleteRecord({ recordId: record.record_id })}
+              onClick={() =>
+                handleClickDeleteModal({ recordId: record.record_id })
+              }
             >
               {"삭제"}
             </Btn>
@@ -102,6 +112,13 @@ export default function DetailRecordList({ planId, detailPlanId }) {
           handleClickModal={handleClickUpdateModal}
           detailPlanId={detailPlanId}
           record={detailPlanRecord}
+        />
+      )}
+      {clickDeleteModal && (
+        <DeleteModal
+          handleClickModal={handleClickDeleteModal}
+          deleteFunc={deleteRecord}
+          deleteInfo={deleteRecordInfo}
         />
       )}
     </>
