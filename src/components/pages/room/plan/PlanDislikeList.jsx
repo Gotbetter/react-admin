@@ -10,12 +10,15 @@ import {
   dislike_columns,
   dislike_paddings,
 } from "../../../commons/column-type/dislike";
+import DeleteModal from "../../../commons/DeleteModal";
 
 export default function PlanDislikeList({ planId }) {
   const paddings = dislike_paddings;
   const columns = dislike_columns;
 
   const [planDislikeList, setPlanDislikeList] = useState([]);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState({});
 
   const queryClient = useQueryClient();
 
@@ -48,6 +51,11 @@ export default function PlanDislikeList({ planId }) {
     }
   );
 
+  const handleDeleteModal = (info) => {
+    setDeleteInfo(info);
+    setDeleteModal(!deleteModal);
+  };
+
   return (
     <>
       {planDislikeList.map((planDislike) => (
@@ -63,7 +71,7 @@ export default function PlanDislikeList({ planId }) {
             <Btn
               color={PURPLE}
               onClick={() =>
-                deleteAPlanDislike({
+                handleDeleteModal({
                   participantId: planDislike.participant_id,
                 })
               }
@@ -73,6 +81,13 @@ export default function PlanDislikeList({ planId }) {
           </PlanDislikeInfo>
         </List>
       ))}
+      {deleteModal && (
+        <DeleteModal
+          handleClickModal={handleDeleteModal}
+          deleteFunc={deleteAPlanDislike}
+          deleteInfo={deleteInfo}
+        />
+      )}
     </>
   );
 }

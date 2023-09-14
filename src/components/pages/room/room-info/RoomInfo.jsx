@@ -7,10 +7,13 @@ import { useApiError } from "../../../../api/useApiError";
 import { useNavigate } from "react-router-dom";
 import { GREY, PURPLE, YELLOW } from "../../../../colors";
 import UpdateRoomInfoModal from "./UpdateRoomInfoModal";
+import DeleteModal from "../../../commons/DeleteModal";
 
 export default function RoomInfo({ room }) {
   const [updateModal, setUpdateModal] = useState(false);
   const [updateRoomInfo, setUpdateRoomInfo] = useState({});
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteRoomInfo, setDeleteRoomInfo] = useState({});
 
   const navigate = useNavigate();
 
@@ -24,7 +27,7 @@ export default function RoomInfo({ room }) {
       staleTime: Infinity,
       onError: handleError,
       onSuccess: async () => {
-        console.log("[RoomInfo]: delete user");
+        console.log("[RoomInfo]: delete room");
         navigate("/rooms");
       },
     }
@@ -33,6 +36,11 @@ export default function RoomInfo({ room }) {
   const handleClickModal = (room) => {
     setUpdateRoomInfo(room);
     setUpdateModal(!updateModal);
+  };
+
+  const handleDeleteModal = (info) => {
+    setDeleteRoomInfo(info);
+    setDeleteModal(!deleteModal);
   };
 
   return (
@@ -45,6 +53,13 @@ export default function RoomInfo({ room }) {
               room={updateRoomInfo}
             />
           )}
+          {deleteModal && (
+            <DeleteModal
+              handleClickModal={handleDeleteModal}
+              deleteFunc={deleteARoom}
+              deleteInfo={deleteRoomInfo}
+            />
+          )}
           <TitleWrapper>
             <Title>{room.title}</Title>
             <BtnWrapper>
@@ -53,7 +68,7 @@ export default function RoomInfo({ room }) {
               </Btn>
               <Btn
                 color={PURPLE}
-                onClick={() => deleteARoom({ roomId: room.room_id })}
+                onClick={() => handleDeleteModal({ roomId: room.room_id })}
               >
                 삭제
               </Btn>

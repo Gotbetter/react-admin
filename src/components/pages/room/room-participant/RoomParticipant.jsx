@@ -13,6 +13,7 @@ import ArrowIcon from "../../../../assets/arrowIcon.svg";
 import { useNavigate } from "react-router-dom";
 import Profile from "../../../commons/Profile";
 import { GREY, PURPLE } from "../../../../colors";
+import DeleteModal from "../../../commons/DeleteModal";
 
 export default function RoomParticipant({
   participants,
@@ -22,6 +23,9 @@ export default function RoomParticipant({
   const paddings = participant_paddings;
   const columns = participant_columns;
   const navigate = useNavigate();
+
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState({});
 
   const queryClient = useQueryClient();
 
@@ -48,6 +52,11 @@ export default function RoomParticipant({
       },
     }
   );
+
+  const handleDeleteModal = (info) => {
+    setDeleteInfo(info);
+    setDeleteModal(!deleteModal);
+  };
 
   return (
     <GraphTemplate columns={columns} paddings={paddings}>
@@ -78,7 +87,7 @@ export default function RoomParticipant({
             <Btn
               color={PURPLE}
               onClick={() =>
-                deleteAParticipant({
+                handleDeleteModal({
                   participantId: participant.participant_id,
                 })
               }
@@ -95,6 +104,13 @@ export default function RoomParticipant({
           </ParticipantInfo>
         </List>
       ))}
+      {deleteModal && (
+        <DeleteModal
+          handleClickModal={handleDeleteModal}
+          deleteFunc={deleteAParticipant}
+          deleteInfo={deleteInfo}
+        />
+      )}
     </GraphTemplate>
   );
 }

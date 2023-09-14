@@ -15,12 +15,15 @@ import {
   rejectJoinRequest,
 } from "../../../../api/participant";
 import { createPlans } from "../../../../api/plan";
+import DeleteModal from "../../../commons/DeleteModal";
 
 export default function RoomJoinRequest({ joinRequesters, roomId }) {
   const paddings = join_request_paddings;
   const columns = join_request_columns;
 
   const [participantInfo, setParticipantInfo] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState({});
 
   const queryClient = useQueryClient();
 
@@ -94,6 +97,11 @@ export default function RoomJoinRequest({ joinRequesters, roomId }) {
     approve({ user_id: userId });
   };
 
+  const handleDeleteModal = (info) => {
+    setDeleteInfo(info);
+    setDeleteModal(!deleteModal);
+  };
+
   useEffect(() => {
     if (participantInfo !== null) {
       // plan 생성
@@ -124,13 +132,22 @@ export default function RoomJoinRequest({ joinRequesters, roomId }) {
           <JoinRequestInfo padding={paddings[3]}>
             <Btn
               color={PURPLE}
-              onClick={() => reject({ user_id: joinRequester.user_id })}
+              onClick={() =>
+                handleDeleteModal({ user_id: joinRequester.user_id })
+              }
             >
               거절
             </Btn>
           </JoinRequestInfo>
         </List>
       ))}
+      {deleteModal && (
+        <DeleteModal
+          handleClickModal={handleDeleteModal}
+          deleteFunc={reject}
+          deleteInfo={deleteInfo}
+        />
+      )}
     </GraphTemplate>
   );
 }

@@ -13,12 +13,15 @@ import { useErrorHandling } from "../../../../../api/useErrorHandling";
 import { useApiError } from "../../../../../api/useApiError";
 import Profile from "../../../../commons/Profile";
 import { PURPLE } from "../../../../../colors";
+import DeleteModal from "../../../../commons/DeleteModal";
 
 export default function DetailDislikeList({ detailPlanId }) {
   const paddings = dislike_paddings;
   const columns = dislike_columns;
 
   const [detailDislikeList, setDetailDislikeList] = useState([]);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState({});
 
   const queryClient = useQueryClient();
 
@@ -51,6 +54,11 @@ export default function DetailDislikeList({ detailPlanId }) {
     }
   );
 
+  const handleDeleteModal = (info) => {
+    setDeleteInfo(info);
+    setDeleteModal(!deleteModal);
+  };
+
   return (
     <>
       {detailDislikeList.map((detailDislike) => (
@@ -66,7 +74,7 @@ export default function DetailDislikeList({ detailPlanId }) {
             <Btn
               color={PURPLE}
               onClick={() =>
-                deleteADetailDislike({
+                handleDeleteModal({
                   participantId: detailDislike.participant_id,
                 })
               }
@@ -76,6 +84,13 @@ export default function DetailDislikeList({ detailPlanId }) {
           </DetailDislikeInfo>
         </List>
       ))}
+      {deleteModal && (
+        <DeleteModal
+          handleClickModal={handleDeleteModal}
+          deleteFunc={deleteADetailDislike}
+          deleteInfo={deleteInfo}
+        />
+      )}
     </>
   );
 }

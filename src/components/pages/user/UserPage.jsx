@@ -12,15 +12,20 @@ import Profile from "../../commons/Profile";
 import UpdateUserModal from "./UpdateUserModal";
 import { useErrorHandling } from "../../../api/useErrorHandling";
 import { useApiError } from "../../../api/useApiError";
+import DeleteModal from "../../commons/DeleteModal";
 
 export default function UserPage() {
+  const paddings = user_paddings;
+  const columns = user_columns;
+  const loginUser = useRecoilValue(userState);
+
   const [users, setUsers] = useState([]);
   const [updateModal, setUpdateModal] = useState(false);
   const [updateUserInfo, setUpdateUserInfo] = useState({});
-  const loginUser = useRecoilValue(userState);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteUserInfo, setDeleteUserInfo] = useState({});
+
   const queryClient = useQueryClient();
-  const paddings = user_paddings;
-  const columns = user_columns;
 
   const errorhandling = useErrorHandling();
   const { handleError } = useApiError(undefined, errorhandling);
@@ -53,6 +58,11 @@ export default function UserPage() {
     setUpdateModal(!updateModal);
   };
 
+  const handleDeleteModal = (info) => {
+    setDeleteUserInfo(info);
+    setDeleteModal(!deleteModal);
+  };
+
   return (
     <Layout tab={"/users"} title={"회원 관리"}>
       <GraphTemplate columns={columns} paddings={paddings}>
@@ -79,7 +89,7 @@ export default function UserPage() {
               user.user_id !== loginUser.user_id ? (
                 <Btn
                   color={PURPLE}
-                  onClick={() => deleteAUser({ userId: user.user_id })}
+                  onClick={() => handleDeleteModal({ userId: user.user_id })}
                 >
                   {"삭제"}
                 </Btn>
@@ -97,6 +107,13 @@ export default function UserPage() {
         handleClickModal={handleClickModal}
         user={updateUserInfo}
       />
+      {deleteModal && (
+        <DeleteModal
+          handleClickModal={handleDeleteModal}
+          deleteFunc={deleteAUser}
+          deleteInfo={deleteUserInfo}
+        />
+      )}
     </Layout>
   );
 }
